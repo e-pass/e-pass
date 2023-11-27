@@ -1,0 +1,4 @@
+django==4.2.7
+djangorestframework==3.14.0
+django_rest_swagger==2.2.0
+drf_yasg==1.21.7
