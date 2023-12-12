@@ -36,12 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'phonenumber_field',
 
     'rest_framework_swagger',
     'rest_framework_simplejwt',
     'rest_framework',
     'drf_yasg',
+
+    'phonenumber_field',
+
     'users',
 ]
 
@@ -136,6 +138,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Users
 AUTH_USER_MODEL = 'users.UserModel'
+
+PHONE_NUMBER_REGION = 'RU'
+
+# OTP
+MAX_OTP_TRY = 3
 
 # JWT Token Settings
 SIMPLE_JWT = {
