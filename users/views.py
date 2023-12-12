@@ -13,7 +13,7 @@ class UserViewSet(ModelViewSet):
         method = self.request.method
         if method == 'POST':
             self.permission_classes = (AllowAny,)
-        elif method in ('PUT', 'PATCH'):
+        elif method in ('PUT', 'PATCH', 'DELETE'):
             self.permission_classes = (IsAdminUser,)
         else:
             self.permission_classes = (IsAuthenticated,)

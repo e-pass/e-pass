@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
@@ -18,6 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Пользователь с таким номером телефона уже существует.")
         return value
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> AbstractUser:
         user = UserModel.objects.create_user(**validated_data)
         return user
