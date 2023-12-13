@@ -21,14 +21,12 @@ from drf_yasg.views import get_schema_view
 from rest_framework import permissions
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+
 schema_view = get_schema_view(
     openapi.Info(
-        title='Snippets API',
+        title='ePass API',
         default_version='v1',
-        description='Test description',
-        terms_of_service='https://www.google.com/policies/terms/',
-        contact=openapi.Contact(email='contact@snippets.local'),
-        license=openapi.License(name='BSD License'),
+        description='API Doc',
     ),
     public=True,
     permission_classes=[permissions.AllowAny,],
