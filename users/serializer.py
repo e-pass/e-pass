@@ -1,8 +1,10 @@
-from django.conf import settings
-from rest_framework import serializers
-from phonenumber_field.serializerfields import PhoneNumberField
+from typing import Any
 
-from users.models import UserModel, OTPModel
+from django.conf import settings
+from phonenumber_field.serializerfields import PhoneNumberField
+from rest_framework import serializers
+
+from users.models import OTPModel, UserModel
 
 
 class OTPSerializer(serializers.ModelSerializer):
@@ -27,16 +29,11 @@ class UserModelCreateSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ('phone_number', 'password', 'first_name', 'last_name', 'is_trainer', 'is_superuser')
 
-    def create(self, validated_data):
-        if validated_data.get("is_superuser"):
+    def create(self, validated_data: Any) -> UserModel:
+        if validated_data.get('is_superuser'):
             user = UserModel.objects.create_superuser(**validated_data)
         else:
             user = UserModel.objects.create_user(**validated_data)
         if user:
             OTPModel.objects.create(user=user)
         return user
-
-    def validate_phone_number(self, phone_number):
-        if self.Meta.model.objects.filter(phone_number=phone_number).exists():
-            raise serializers.ValidationError("Пользователь с таким номером телефона уже существует.")
-        return phone_number

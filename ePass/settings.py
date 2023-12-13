@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-8)qv^+sauc*92j-v0&v5i(baakp-z=36gz9*5v2=_wm#2ete!*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -55,13 +55,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'ePass.middleware.JsonResponseMiddleware',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'ePass.core.pagination.CustomPagination',
+    'DEFAULT_PAGINATION_CLASS': 'ePass.core.CustomPagination.CustomPagination',
     'PAGE_SIZE': 15,
 }
 
@@ -84,6 +85,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'ePass.wsgi.application'
+
+APPEND_SLASH = False
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
