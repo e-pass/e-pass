@@ -6,7 +6,7 @@ from users.serializer import UserSerializer
 
 
 class UserViewSet(ModelViewSet):
-    queryset = UserModel.objects.all()
+    queryset = UserModel.objects.all().select_related('otp')
     serializer_class = UserSerializer
 
     def get_permissions(self) -> list:
