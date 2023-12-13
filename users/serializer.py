@@ -9,10 +9,11 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField(max_length=150, required=True)
     phone_number = PhoneNumberField(required=True)
     is_trainer = serializers.BooleanField(required=True)
+    password = serializers.CharField(min_length=8, write_only=True)
 
     class Meta:
         model = UserModel
-        fields = ('id', 'username', 'phone_number', 'is_trainer')
+        fields = ('id', 'username', 'phone_number', 'password', 'is_trainer',)
 
     def validate_phone_number(self, value: PhoneNumberField) -> PhoneNumberField:
         if self.Meta.model.objects.filter(phone_number=value).exists():
