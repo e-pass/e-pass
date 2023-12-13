@@ -2,12 +2,12 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from users.models import UserModel
-from users.serializer import UserSerializer
+from users.serializer import UserModelSerializer
 
 
 class UserViewSet(ModelViewSet):
     queryset = UserModel.objects.all().select_related('otp')
-    serializer_class = UserSerializer
+    serializer_class = UserModelSerializer
 
     def get_permissions(self) -> list:
         method = self.request.method
