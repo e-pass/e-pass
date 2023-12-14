@@ -23,7 +23,9 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 
 class UserModelCreateSerializer(serializers.ModelSerializer):
-    phone_number = PhoneNumberField(region=settings.PHONE_NUMBER_REGION)
+    phone_number = PhoneNumberField(region=settings.PHONE_NUMBER_REGION, required=True)
+    first_name = serializers.CharField(max_length=50, required=True)
+    last_name = serializers.CharField(max_length=50, required=True)
 
     class Meta:
         model = UserModel
