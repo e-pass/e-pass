@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from section.models import SectionModel
 from section.serializer import SectionSerializer
-from users.permissions import IsTrainer
+from users.permissions import IsTrainer, IsOwner
 
 
 class SectionViewSet(ModelViewSet):
@@ -13,9 +13,9 @@ class SectionViewSet(ModelViewSet):
     def get_permissions(self) -> list:
         method = self.request.method
         if method == 'POST':
-            self.permission_classes = (IsTrainer,)
+            self.permission_classes = (IsAuthenticated,)
         elif method in ('PUT', 'PATCH', 'DELETE'):
-            self.permission_classes = (IsTrainer,)
+            self.permission_classes = (IsOwner,)
         else:
             self.permission_classes = (IsAuthenticated,)
 
