@@ -36,13 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'phonenumber_field',
 
+    # 3-rd party app
+    'phonenumber_field',
     'rest_framework_swagger',
     'rest_framework_simplejwt',
     'rest_framework',
     'drf_yasg',
 
+    # Local apps
     'users',
     'section',
 ]
