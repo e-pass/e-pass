@@ -36,6 +36,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('users.urls')),
     path('api/v1/', include('section.urls')),
-    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=30), name='schema-swagger-ui'),
 ]
