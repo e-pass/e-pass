@@ -13,5 +13,5 @@ class JsonResponseMiddleware:
     def __call__(self, request: Request) -> Response | JsonResponse:
         response = self.get_response(request)
         if response.status_code == 404:
-            return JsonResponse(data={'error': 'Not Found'}, status=status.HTTP_404_NOT_FOUND)
+            return JsonResponse(data={'error': 'Wrong API endpoint'}, status=status.HTTP_404_NOT_FOUND)
         return response

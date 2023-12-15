@@ -27,19 +27,9 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ('first_name', 'last_name', 'is_trainer')
+    REQUIRED_FIELDS = ('first_name', 'last_name', 'is_trainer',)
 
     objects = UserModelManager()
 
     def __str__(self) -> str:
         return f'{self.first_name} {self.last_name}, {self.phone_number}'
-
-
-class OTPModel(models.Model):
-    """One time password model"""
-    user = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name='otp')
-
-    otp_code = models.CharField(max_length=6, blank=True, null=True)
-    otp_expiry = models.DateTimeField(blank=True, null=True)
-    max_otp_try = models.CharField(max_length=2, default=settings.MAX_OTP_TRY)
-    otp_max_out = models.DateTimeField(blank=True, null=True)
