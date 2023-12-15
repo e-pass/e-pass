@@ -23,12 +23,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 schema_view = get_schema_view(
     openapi.Info(
-        title='Snippets API',
+        title='ePass API',
         default_version='v1',
-        description='Test description',
-        terms_of_service='https://www.google.com/policies/terms/',
-        contact=openapi.Contact(email='contact@snippets.local'),
-        license=openapi.License(name='BSD License'),
+        description='API Doc',
     ),
     public=True,
     permission_classes=[permissions.AllowAny,],
@@ -36,7 +33,9 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
-    path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('api/v1/', include('users.urls')),
+    path('api/v1/', include('section.urls')),
+    path('api/v1/', include('authentication.urls')),
+    path('api/v1/authentication/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=30), name='schema-swagger-ui'),
 ]
