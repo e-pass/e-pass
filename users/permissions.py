@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.views import View
 from rest_framework import permissions
 from rest_framework.request import Request
@@ -11,5 +13,5 @@ class IsTrainer(permissions.BasePermission):
 
 class IsOwner(permissions.BasePermission):
 
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request: Request, view: View, obj: Any) -> bool:
         return obj.owner_id == request.user.id
