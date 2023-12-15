@@ -7,3 +7,21 @@ class IsTrainer(permissions.BasePermission):
 
     def has_permission(self, request: Request, view: View) -> bool:
         return request.user.is_authenticated and request.user.is_trainer
+
+
+class IsOwnerOrStaff(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return bool(
+            request.user and request.user.is_authenticated and
+            (obj.owner == request.user or request.user.is_staff)
+        )
+
+
+class IsSectionOwnerOrGroupTrainerOrStaff(permissions.BasePermission):
+
+    def has_object_permission(self, request, view, obj):
+        return bool(
+            request.user and request.user.is_authenticated and
+            (obj.section.owner == request.user or obj.trainer == request.user or request.user.is_staff)
+        )
