@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('section', '0001_initial'),
+        ('sections', '0001_initial'),
     ]
 
     operations = [
@@ -33,12 +33,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='lessonmodel',
             name='group',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='section.groupmodel'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sections.groupmodel'),
         ),
         migrations.AddField(
             model_name='groupmodel',
-            name='section',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='section.sectionmodel'),
+            name='sections',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sections.sectionmodel'),
         ),
         migrations.AddField(
             model_name='groupmodel',

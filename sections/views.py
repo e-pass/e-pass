@@ -1,8 +1,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from section.models import SectionModel
-from section.serializer import SectionSerializer
+from sections.models import SectionModel
+from sections.serializer import SectionSerializer
 from users.permissions import IsOwnerOrStaff
 
 

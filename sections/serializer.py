@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from section.models import SectionModel
+from sections.models import SectionModel
 from users.models import UserModel
 from users.serializer import UserModelSerializer
 

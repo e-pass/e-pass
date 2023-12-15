@@ -45,7 +45,7 @@ INSTALLED_APPS = [
 
     # Local apps
     'users',
-    'section',
+    'sections',
     'authentication'
 ]
 
