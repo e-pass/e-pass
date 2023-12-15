@@ -22,7 +22,7 @@ class UserModelSerializer(serializers.ModelSerializer):
         instance = super(UserModelSerializer, self).update(instance, validated_data)
         return instance
 
-    def validate_phone_number(self, phone_number):
+    def validate_phone_number(self, phone_number: str) -> str:
         if self.Meta.model.objects.filter(phone_number=phone_number).exists():
             raise serializers.ValidationError("Пользователь с таким номером телефона уже существует.")
         return phone_number

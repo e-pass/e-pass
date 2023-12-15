@@ -6,12 +6,12 @@ from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import AuthUser
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from authentication.models import ConfirmationCodeModel
-from authentication.serializer import ConfirmationCodeSerializer, VerifyCodeSerializer
+from authentication.serializer import (ConfirmationCodeSerializer,
+                                       VerifyCodeSerializer)
 from users.models import UserModel
-
-from rest_framework_simplejwt.tokens import RefreshToken
 
 
 class SendConfirmationCodeView(viewsets.ViewSet):
