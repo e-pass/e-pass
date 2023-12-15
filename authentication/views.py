@@ -23,16 +23,12 @@ class SendConfirmationCodeView(viewsets.ViewSet):
         if serializer.is_valid():
             phone_number = request.data.get('phone_number')
 
-            if UserModel.objects.filter(phone_number=phone_number).exists():
-                user = UserModel.objects.get(phone_number=phone_number)
-                code = self.generate_confirmation_code()
-                ConfirmationCodeModel.objects.create(user=user, code=f'{code}')
+            user = UserModel.objects.get(phone_number=phone_number)
+            code = self.generate_confirmation_code()
+            ConfirmationCodeModel.objects.create(user=user, code=f'{code}')
 
-                # Здесь должна быть логика отправки смс с кодом на указанный номер
-
-                return Response(data={'code': code}, status=status.HTTP_200_OK)
-
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            # Здесь должна быть логика отправки смс с кодом на указанный номер
+            return Response(data={'code': code}, status=status.HTTP_200_OK)
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
