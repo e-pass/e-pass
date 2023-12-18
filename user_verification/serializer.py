@@ -11,7 +11,7 @@ from users.models import UserModel
 class ConfirmationCodeSerializer(serializers.Serializer):
     phone_number = PhoneNumberField(region=settings.PHONE_NUMBER_REGION, required=True)
 
-    def create(self, validated_data) -> dict:
+    def create(self, validated_data: dict) -> dict:
         phone_number = validated_data.get('phone_number')
 
         user = UserModel.objects.get(phone_number=phone_number)

@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Type
 
 from django.db import models
 from django.utils import timezone
@@ -28,7 +28,7 @@ class ConfirmationCodeModel(models.Model):
         self.save()
 
     @classmethod
-    def get_confirmation_code(cls, code: str) -> Optional['ConfirmationCodeModel']:
+    def get_confirmation_code(cls: Type['ConfirmationCodeModel'], code: str) -> Optional['ConfirmationCodeModel']:
         try:
             return cls.objects.get(code=code)
         except cls.DoesNotExist:

@@ -16,7 +16,7 @@ class UserModelSerializer(serializers.ModelSerializer):
         fields = ('id', 'phone_number', 'first_name', 'last_name', 'is_trainer',
                   'is_phone_number_verified', 'created_at', 'updated_at')
 
-    def update(self, instance, validated_data):
+    def update(self, instance, validated_data: dict):
         if validated_data.get('phone_number'):
             instance.is_phone_number_verified = False
         instance = super(UserModelSerializer, self).update(instance, validated_data)

@@ -1,5 +1,4 @@
-import random
-from typing import Any, Optional
+from typing import Any
 
 from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny
@@ -11,7 +10,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from user_verification.models import ConfirmationCodeModel
 from user_verification.serializer import (ConfirmationCodeSerializer,
                                           VerifyCodeSerializer)
-from users.models import UserModel
 
 
 class SendConfirmationCodeView(viewsets.ViewSet):
