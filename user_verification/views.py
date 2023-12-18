@@ -18,7 +18,7 @@ class SendConfirmationCodeView(viewsets.ViewSet):
     permission_classes = (AllowAny,)
     serializer_class = ConfirmationCodeSerializer
 
-    def create(self, request, *args, **kwargs):
+    def create(self, request: Request, *args: Any, **kwargs: dict) -> Response:
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
             data = serializer.save()
@@ -30,29 +30,19 @@ class SendConfirmationCodeView(viewsets.ViewSet):
 
 class VerifyConfirmationCode(viewsets.ViewSet):
     permission_classes = (AllowAny,)
+    serializer_class = VerifyCodeSerializer
 
     def create(self, request: Request, *args: Any, **kwargs: dict) -> Response:
-        serializer = VerifyCodeSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            code = request.data.get('code')
-            code_model_obj = self.get_confirmation_code_model(code=code)
+            code = serializer.validated_data['code']
+            code_model = ConfirmationCodeModel.get_confirmation_code(code=code)
+            code_model.mark_code_as_used()
+            access_token = self.get_access_token(user=code_model.user)
 
-            if all((code_model_obj, not code_model_obj.is_expired(), code_model_obj.is_valid)):
-                code_model_obj.is_valid = False
-                code_model_obj.user.is_phone_number_verified = True
-                code_model_obj.save()
-
-                access_token = self.get_access_token(code_model_obj.user)
-                return Response({'access_token': access_token}, status=status.HTTP_200_OK)
+            return Response({'access_token': access_token}, status=status.HTTP_200_OK)
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @staticmethod
-    def get_confirmation_code_model(code: str) -> Optional[ConfirmationCodeModel]:
-        try:
-            return ConfirmationCodeModel.objects.get(code=code)
-        except ConfirmationCodeModel.DoesNotExist:
-            return None
 
     @staticmethod
     def get_access_token(user: AuthUser) -> str:

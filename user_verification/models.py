@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from django.db import models
 from django.utils import timezone
@@ -19,7 +19,17 @@ class ConfirmationCodeModel(models.Model):
         super().save(*args, **kwargs)
 
     def is_expired(self) -> bool:
-        return False if timezone.now() <= self.expires_at else True
+        return timezone.now() > self.expires_at
 
-    class Meta:
-        unique_together = ('user', 'code',)
+    def mark_code_as_used(self) -> None:
+        self.is_valid = False
+        self.user.is_phone_number_verified = True
+        self.user.save()
+        self.save()
+
+    @classmethod
+    def get_confirmation_code(cls, code: str) -> Optional['ConfirmationCodeModel']:
+        try:
+            return cls.objects.get(code=code)
+        except cls.DoesNotExist:
+            return None
