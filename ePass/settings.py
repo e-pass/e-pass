@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework',
     'drf_yasg',
+    'drf_standardized_errors',
 
     # Local apps
     'users',
@@ -67,8 +68,13 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'EXCEPTION_HANDLER': 'drf_standardized_errors.handler.exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'ePass.core.CustomPagination.CustomPagination',
     'PAGE_SIZE': 15,
+}
+
+DRF_STANDARDIZED_ERRORS = {
+    'ENABLE_IN_DEBUG_FOR_UNHANDLED_EXCEPTIONS': True,
 }
 
 ROOT_URLCONF = 'ePass.urls'
@@ -150,9 +156,6 @@ AUTH_USER_MODEL = 'users.UserModel'
 PHONE_NUMBER_REGION = 'RU'
 
 CONFIRMATION_CODE_EXPIRATION = 600  # Seconds
-
-# OTP
-MAX_OTP_TRY = 3
 
 # JWT Token Settings
 SIMPLE_JWT = {
