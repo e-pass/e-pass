@@ -48,6 +48,7 @@ class VerifyConfirmationCode(viewsets.ViewSet):
 
             if all((code_model_obj, not code_model_obj.is_expired(), code_model_obj.is_valid)):
                 code_model_obj.is_valid = False
+                code_model_obj.user.is_phone_number_verified = True
                 code_model_obj.save()
 
                 access_token = self.get_access_token(code_model_obj.user)
