@@ -11,6 +11,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from authentication.models import ConfirmationCodeModel
 from authentication.serializer import (ConfirmationCodeSerializer,
                                        VerifyCodeSerializer)
+from authentication.services.sms_service import send_sms_with_code
 from users.models import UserModel
 
 
@@ -28,13 +29,18 @@ class SendConfirmationCodeView(viewsets.ViewSet):
             ConfirmationCodeModel.objects.create(user=user, code=f'{code}')
 
             # Здесь должна быть логика отправки смс с кодом на указанный номер
-            return Response(data={'code': code}, status=status.HTTP_200_OK)
+            sms_result = send_sms_with_code(phone_number, code)
+            if sms_result['server_status'] == 200 and sms_result['message_status']['status_code'] == 100:
+                return Response({'message': 'Message sent successfully'}, status=status.HTTP_200_OK)
+            return Response(data={'message': 'Message failed to send', 'details': sms_result},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @staticmethod
     def generate_confirmation_code() -> int:
-        return random.randint(111111, 999999)
+        # Я сократил до 4 символов, как в макете.
+        return random.randint(1111, 9999)
 
 
 class VerifyConfirmationCode(viewsets.ViewSet):
