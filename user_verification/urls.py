@@ -1,7 +1,7 @@
 from rest_framework import routers
 
-from authentication.views import (SendConfirmationCodeView,
-                                  VerifyConfirmationCode)
+from user_verification.views import (SendConfirmationCodeView,
+                                     VerifyConfirmationCode)
 
 router = routers.DefaultRouter()
 router.register(prefix=r'auth/send-code',

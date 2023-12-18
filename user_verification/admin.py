@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from authentication.models import ConfirmationCodeModel
+from user_verification.models import ConfirmationCodeModel
 
 
 @admin.register(ConfirmationCodeModel)

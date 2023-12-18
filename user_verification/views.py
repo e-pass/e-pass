@@ -8,33 +8,24 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import AuthUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from authentication.models import ConfirmationCodeModel
-from authentication.serializer import (ConfirmationCodeSerializer,
-                                       VerifyCodeSerializer)
+from user_verification.models import ConfirmationCodeModel
+from user_verification.serializer import (ConfirmationCodeSerializer,
+                                          VerifyCodeSerializer)
 from users.models import UserModel
 
 
 class SendConfirmationCodeView(viewsets.ViewSet):
     permission_classes = (AllowAny,)
+    serializer_class = ConfirmationCodeSerializer
 
-    def create(self, request: Request, *args: Any, **kwargs: dict) -> Response:
-        serializer = ConfirmationCodeSerializer(data=request.data)
-
+    def create(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            phone_number = request.data.get('phone_number')
+            data = serializer.save()
 
-            user = UserModel.objects.get(phone_number=phone_number)
-            code = self.generate_confirmation_code()
-            ConfirmationCodeModel.objects.create(user=user, code=f'{code}')
-
-            # Здесь должна быть логика отправки смс с кодом на указанный номер
-            return Response(data={'code': code}, status=status.HTTP_200_OK)
+            return Response(data={'code': data['code']}, status=status.HTTP_200_OK)
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    @staticmethod
-    def generate_confirmation_code() -> int:
-        return random.randint(111111, 999999)
 
 
 class VerifyConfirmationCode(viewsets.ViewSet):
