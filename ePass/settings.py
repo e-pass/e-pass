@@ -12,6 +12,28 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+import environ
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+env = environ.Env(
+    DEBUG=bool,
+    SECRET_KEY=str,
+
+    # Token
+    ACCESS_TOKEN_LIFE_TIME=int,
+
+    # SMS
+    SMSRU_API_TOKEN=str,
+    CONFIRMATION_CODE_EXPIRATION=int,
+
+    # Redis
+    REDIS_HOST=str,
+    REDIS_PORT=int,
+)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,10 +41,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8)qv^+sauc*92j-v0&v5i(baakp-z=36gz9*5v2=_wm#2ete!*'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['*']
 
@@ -43,6 +65,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'drf_standardized_errors',
+    'django_celery_results',
 
     # Local apps
     'users',
@@ -131,7 +154,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -155,12 +178,12 @@ AUTH_USER_MODEL = 'users.UserModel'
 
 PHONE_NUMBER_REGION = 'RU'
 
-CONFIRMATION_CODE_EXPIRATION = 600  # Seconds
+CONFIRMATION_CODE_EXPIRATION = env('CONFIRMATION_CODE_EXPIRATION')  # Seconds
 
 # JWT Token Settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=5),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=env('ACCESS_TOKEN_LIFE_TIME')),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=env('ACCESS_TOKEN_LIFE_TIME')),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,
     'UPDATE_LAST_LOGIN': False,
@@ -198,4 +221,12 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer',
 }
 
-SMSRU_API_TOKEN = 'B2AA793B-9601-EAFD-42E8-85AE665D7827'
+SMSRU_API_TOKEN = env('SMSRU_API_TOKEN')
+
+# Redis
+REDIS_HOST = env('REDIS_HOST')
+REDIS_PORT = env('REDIS_PORT')
+
+# Celery
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
+CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
