@@ -21,7 +21,10 @@ class SendConfirmationCodeView(viewsets.ViewSet):
         if serializer.is_valid():
             data = serializer.save()
 
-            return Response(data={'code': data['code']}, status=status.HTTP_200_OK)
+            if data['server_status'] == 200 and data['message_status']['status_code'] == 100:
+                return Response({'message': 'Message sent successfully'}, status=status.HTTP_200_OK)
+            return Response(data={'message': 'Message failed to send', 'details': data},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
