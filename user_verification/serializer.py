@@ -19,11 +19,11 @@ class ConfirmationCodeSerializer(serializers.Serializer):
         # TODO: Здесь должна быть логика отправки смс с кодом на указанный номер
         return {'code': code}
 
-    # @staticmethod
-    # def validate_phone_number(phone_number: str) -> str:
-    #     if not UserModel.objects.filter(phone_number=phone_number).exists():
-    #         raise serializers.ValidationError('Пользователя с введенным номером телефона не существует')
-    #     return phone_number
+    @staticmethod
+    def validate_phone_number(phone_number: str) -> str:
+        if not UserModel.objects.filter(phone_number=phone_number).exists():
+            raise serializers.ValidationError('Пользователя с введенным номером телефона не существует')
+        return phone_number
 
     @staticmethod
     def __generate_confirmation_code() -> int:
