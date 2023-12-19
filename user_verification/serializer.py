@@ -4,6 +4,7 @@ from django.conf import settings
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
+from services.sms_service import send_sms_with_code
 from user_verification.models import ConfirmationCodeModel
 from users.models import UserModel
 
@@ -17,7 +18,8 @@ class ConfirmationCodeSerializer(serializers.Serializer):
         user = UserModel.objects.get(phone_number=phone_number)
         ConfirmationCodeModel.objects.create(user=user, code=f'{code}')
         # TODO: Здесь должна быть логика отправки смс с кодом на указанный номер
-        return {'code': code}
+        sms_result = send_sms_with_code(phone_number, code)
+        return sms_result
 
     @staticmethod
     def validate_phone_number(phone_number: str) -> str:
