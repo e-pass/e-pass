@@ -221,6 +221,7 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_SERIALIZER': 'rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer',
 }
 
+# SMS service
 SMSRU_API_TOKEN = env('SMSRU_API_TOKEN')
 
 # Redis
