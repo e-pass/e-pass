@@ -10,5 +10,5 @@ class SectionAdmin(ModelAdmin):
 
 
 @admin.register(GroupModel)
-class SectionGroupAdmin(ModelAdmin):
+class GroupAdmin(ModelAdmin):
     pass

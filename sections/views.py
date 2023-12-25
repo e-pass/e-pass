@@ -1,8 +1,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from sections.models import SectionModel
-from sections.serializer import SectionSerializer
+from sections.models import SectionModel, GroupModel
+from sections.serializer import SectionSerializer, GroupSerializer
 from users.permissions import IsOwnerOrStaff
 
 
@@ -18,3 +18,8 @@ class SectionViewSet(ModelViewSet):
             self.permission_classes = (IsOwnerOrStaff,)
 
         return super(SectionViewSet, self).get_permissions()
+
+
+class GroupViewSet(ModelViewSet):
+    queryset = GroupModel.objects.all().prefetch_related('trainers', 'students')
+    serializer_class = GroupSerializer

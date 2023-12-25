@@ -18,9 +18,8 @@ class IsOwnerOrStaff(permissions.BasePermission):
                     request.user.is_staff))
 
 
-class IsSectionOwnerOrGroupTrainerOrStaff(permissions.BasePermission):
-
-    def has_object_permission(self, request: Request, view: View, obj: Any) -> bool:
-        return any((obj.section.owner == request.user,
-                    obj.trainer == request.user,
-                    request.user.is_staff))
+# class IsSectionOwnerOrGroupTrainerOrStaff(permissions.BasePermission):
+#
+#     def has_object_permission(self, request: Request, view: View, obj: Any) -> bool:
+#         return any((obj.section.owner == request.user,
+#                     request.user.is_staff))

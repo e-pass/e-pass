@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from sections.models import SectionModel
+from sections.models import SectionModel, GroupModel
 from users.models import UserModel, TrainerModel, StudentModel
 from users.serializer import UserModelSerializer
 
@@ -33,3 +33,13 @@ class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectionModel
         fields = '__all__'
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    trainers = UserModelSerializer(many=True, read_only=True)
+    students = UserModelSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = GroupModel
+        fields = ('id', 'name', 'section', 'trainers', 'students',
+                  'created_at', 'updated_at')
