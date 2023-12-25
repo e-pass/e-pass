@@ -1,8 +1,8 @@
 from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from users.models import UserModel
-from users.serializer import UserModelSerializer
+from users.models import UserModel, TrainerModel, StudentModel
+from users.serializer import UserModelSerializer, TrainerModelSerializer, StudentModelSerializer
 
 
 class UserViewSet(ModelViewSet):
@@ -19,3 +19,13 @@ class UserViewSet(ModelViewSet):
             self.permission_classes = (IsAuthenticated,)
 
         return super(UserViewSet, self).get_permissions()
+
+
+class TrainerViewSet(UserViewSet):
+    queryset = TrainerModel.objects.all()
+    serializer_class = TrainerModelSerializer
+
+
+class StudentViewSet(UserViewSet):
+    queryset = StudentModel.objects.all()
+    serializer_class = StudentModelSerializer

@@ -16,7 +16,6 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
 
-    is_trainer = models.BooleanField(default=False)
     is_phone_number_verified = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
@@ -27,9 +26,18 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ('first_name', 'last_name', 'is_trainer',)
+    REQUIRED_FIELDS = ('first_name', 'last_name')
 
     objects = UserModelManager()
 
     def __str__(self) -> str:
         return f'{self.first_name} {self.last_name}, {self.phone_number}'
+
+
+class TrainerModel(UserModel):
+    pass
+
+
+class StudentModel(UserModel):
+    parent_name = models.CharField(max_length=50, blank=True, null=True)
+    parent_phone = PhoneNumberField(region=settings.PHONE_NUMBER_REGION, blank=True, null=True)
