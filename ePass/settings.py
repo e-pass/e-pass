@@ -32,6 +32,13 @@ env = environ.Env(
     # Redis
     REDIS_HOST=str,
     REDIS_PORT=int,
+
+    # Postgres
+    POSTGRES_DB=str,
+    POSTGRES_USER=str,
+    POSTGRES_PASSWORD=str,
+    POSTGRES_DB_HOST=str,
+    POSTGRES_DB_PORT=int,
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -81,7 +88,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ePass.middleware.JsonResponseMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -125,13 +131,23 @@ APPEND_SLASH = False
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# Postgres
+DB_NAME = env('POSTGRES_DB')
+DB_USER = env('POSTGRES_USER')
+DB_PASSWORD = env('POSTGRES_PASSWORD')
+DB_HOST = env('POSTGRES_DB_HOST')
+DB_PORT = env('POSTGRES_DB_PORT')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
+        'PORT': DB_PORT,
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

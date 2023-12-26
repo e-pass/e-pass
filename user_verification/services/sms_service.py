@@ -1,5 +1,5 @@
-from django.conf import settings
 import requests
+from django.conf import settings
 
 
 def send_sms_with_code(phone_number: str, code: int) -> dict:
