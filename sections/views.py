@@ -3,7 +3,6 @@ from rest_framework.viewsets import ModelViewSet
 
 from sections.models import SectionModel, GroupModel
 from sections.serializer import SectionSerializer, GroupSerializer
-from users.permissions import IsOwnerOrStaff
 
 
 class SectionViewSet(ModelViewSet):
@@ -15,7 +14,7 @@ class SectionViewSet(ModelViewSet):
         if method == 'POST':
             self.permission_classes = (IsAuthenticated,)
         elif method in ('PUT', 'PATCH', 'DELETE'):
-            self.permission_classes = (IsOwnerOrStaff,)
+            self.permission_classes = (IsAuthenticated,)
 
         return super(SectionViewSet, self).get_permissions()
 
