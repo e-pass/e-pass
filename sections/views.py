@@ -1,9 +1,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from sections.models import SectionModel
-from sections.serializer import SectionSerializer
-from users.permissions import IsOwnerOrStaff
+from sections.models import SectionModel, GroupModel
+from sections.serializer import SectionSerializer, GroupSerializer
 
 
 class SectionViewSet(ModelViewSet):
@@ -15,6 +14,11 @@ class SectionViewSet(ModelViewSet):
         if method == 'POST':
             self.permission_classes = (IsAuthenticated,)
         elif method in ('PUT', 'PATCH', 'DELETE'):
-            self.permission_classes = (IsOwnerOrStaff,)
+            self.permission_classes = (IsAuthenticated,)
 
         return super(SectionViewSet, self).get_permissions()
+
+
+class GroupViewSet(ModelViewSet):
+    queryset = GroupModel.objects.all().prefetch_related('trainers', 'students')
+    serializer_class = GroupSerializer
