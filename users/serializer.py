@@ -23,7 +23,7 @@ class UserModelSerializer(serializers.ModelSerializer):
         return instance
 
     def validate_phone_number(self, phone_number: str) -> str:
-        if self.Meta.model.objects.filter(phone_number=phone_number).exists():
+        if UserModel.objects.filter(phone_number=phone_number).exists():
             raise serializers.ValidationError("Пользователь с таким номером телефона уже существует.")
         return phone_number
 
@@ -35,6 +35,14 @@ class TrainerModelSerializer(UserModelSerializer):
         fields = ('id', 'phone_number', 'first_name', 'last_name',
                   'is_phone_number_verified', 'created_at', 'updated_at',
                   'section', 'my_groups')
+        read_only_fields = ('my_own_section',)
+
+    def to_representation(self, instance):
+        """Убирает поле 'my_own_section', если данный тренер не является владельцем секции."""
+        ret = super(TrainerModelSerializer, self).to_representation(instance)
+        if not ret.get("my_own_section"):
+            ret.popitem("my_own_section")
+        return ret
 
 
 class StudentModelSerializer(UserModelSerializer):
