@@ -2,7 +2,7 @@ from django.conf import settings
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
-from users.models import UserModel, TrainerModel, StudentModel
+from users.models import StudentModel, TrainerModel, UserModel
 
 
 class UserModelSerializer(serializers.ModelSerializer):

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
-from users.models import UserModel, TrainerModel, StudentModel
+from users.models import StudentModel, TrainerModel, UserModel
 
 
 class SectionModel(models.Model):

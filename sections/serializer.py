@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from sections.models import SectionModel, GroupModel
-from users.models import UserModel, TrainerModel, StudentModel
+from sections.models import GroupModel, SectionModel
+from users.models import StudentModel, TrainerModel, UserModel
 from users.serializer import UserModelSerializer
 
 

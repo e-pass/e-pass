@@ -1,6 +1,6 @@
 from rest_framework import routers
 
-from sections.views import SectionViewSet, GroupViewSet
+from sections.views import GroupViewSet, SectionViewSet
 
 router = routers.DefaultRouter()
 router.register(prefix='section', viewset=SectionViewSet, basename='section_api')

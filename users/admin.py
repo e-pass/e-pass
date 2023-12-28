@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from users.models import UserModel, TrainerModel, StudentModel
+from users.models import StudentModel, TrainerModel, UserModel
 
 
 @admin.register(UserModel)
