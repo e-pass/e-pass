@@ -19,7 +19,6 @@ from django.urls import include, path
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 from rest_framework import permissions
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -36,6 +35,5 @@ urlpatterns = [
     path('api/v1/', include('users.urls')),
     path('api/v1/', include('sections.urls')),
     path('api/v1/', include('user_verification.urls')),
-    path('api/v1/user_verification/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=30), name='schema-swagger-ui'),
 ]
