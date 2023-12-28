@@ -12,7 +12,7 @@
 * Create Postgres DB:
 ```commandline
 CREATE DATABASE epass_db;
-CREATE ROLE epass_username with password "password";
+CREATE ROLE epass_username with password 'password';
 ALTER ROLE "epass_username" with LOGIN;
 GRANT ALL PRIVILEGES ON DATABASE "epass_db" TO epass_username;
 ALTER USER epass_username CREATEDB;

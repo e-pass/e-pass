@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
 from sections.models import GroupModel, SectionModel
-from users.models import StudentModel, TrainerModel, UserModel
-from users.serializer import UserModelSerializer
+from users.models import StudentModel, TrainerModel
+from users.serializer import UserModelSerializer, TrainerModelSerializer
 
 
 class SectionSerializer(serializers.ModelSerializer):
     owner_id = serializers.PrimaryKeyRelatedField(
         source='owner',
-        queryset=UserModel.objects.all(),
+        queryset=TrainerModel.objects.all(),
         write_only=True
     )
     trainers_ids = serializers.PrimaryKeyRelatedField(
@@ -27,12 +27,13 @@ class SectionSerializer(serializers.ModelSerializer):
     )
 
     owner = UserModelSerializer(read_only=True)
-    trainers = UserModelSerializer(many=True, read_only=True)
+    trainers = TrainerModelSerializer(many=True, read_only=True)
     students = UserModelSerializer(many=True, read_only=True)
 
     class Meta:
         model = SectionModel
-        fields = '__all__'
+        fields = ('id', 'name', 'owner', 'owner_id', 'trainers', 'trainers_ids',
+                  'students', 'students_ids', 'created_at', 'updated_at',)
 
 
 class GroupSerializer(serializers.ModelSerializer):

@@ -26,7 +26,7 @@ class UserModelSerializer(serializers.ModelSerializer):
 
     def validate_phone_number(self, phone_number: str) -> str:
         if self.Meta.model.objects.filter(phone_number=phone_number).exists():
-            raise serializers.ValidationError("Пользователь с таким номером телефона уже существует.")
+            raise serializers.ValidationError('Пользователь с таким номером телефона уже существует.')
         return phone_number
 
 
@@ -35,8 +35,7 @@ class TrainerModelSerializer(UserModelSerializer):
     class Meta:
         model = TrainerModel
         fields = ('id', 'phone_number', 'first_name', 'last_name',
-                  'is_phone_number_verified', 'created_at', 'updated_at',
-                  'section', 'my_groups')
+                  'is_phone_number_verified', 'created_at', 'updated_at',)
 
 
 class StudentModelSerializer(UserModelSerializer):
@@ -47,4 +46,4 @@ class StudentModelSerializer(UserModelSerializer):
         model = StudentModel
         fields = ('id', 'phone_number', 'first_name', 'last_name',
                   'is_phone_number_verified', 'created_at', 'updated_at',
-                  'parent_phone', 'parent_name', 'section', 'my_groups')
+                  'parent_phone', 'parent_name',)

@@ -26,7 +26,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     updated_at = models.DateTimeField(auto_now=True)
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ('first_name', 'last_name')
+    REQUIRED_FIELDS = ('first_name', 'last_name',)
 
     objects = UserModelManager()
 

@@ -3,7 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 
 from users.models import StudentModel, TrainerModel, UserModel
 from users.permissions import (
-    IsOwnerOrStaff, IsSectionOwnerOrGroupTrainerOrAccountOwnerOrStaff)
+    IsOwnerOrStaff, IsGroupTrainerOrAccountOwnerOrStaff, IsSectionOwner)
 from users.serializer import (StudentModelSerializer, TrainerModelSerializer,
                               UserModelSerializer)
 
@@ -41,7 +41,7 @@ class StudentViewSet(UserViewSet):
         if method == 'POST':
             self.permission_classes = (AllowAny,)
         elif method in ('GET', 'PUT', 'PATCH'):
-            self.permission_classes = (IsSectionOwnerOrGroupTrainerOrAccountOwnerOrStaff,)
+            self.permission_classes = (IsGroupTrainerOrAccountOwnerOrStaff, IsSectionOwner)
         elif method == 'DELETE':
             self.permission_classes = (IsAdminUser,)
 
