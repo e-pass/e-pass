@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.conf import settings
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
@@ -16,11 +18,11 @@ class UserModelSerializer(serializers.ModelSerializer):
         fields = ('id', 'phone_number', 'first_name', 'last_name',
                   'is_phone_number_verified', 'created_at', 'updated_at')
 
-    def update(self, instance, validated_data: dict):
+    def update(self, instance, validated_data: dict) -> Any:
         if validated_data.get('phone_number'):
             instance.is_phone_number_verified = False
-        instance = super(UserModelSerializer, self).update(instance, validated_data)
-        return instance
+
+        return super(UserModelSerializer, self).update(instance, validated_data)
 
     def validate_phone_number(self, phone_number: str) -> str:
         if self.Meta.model.objects.filter(phone_number=phone_number).exists():

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
-from users.models import StudentModel, TrainerModel, UserModel
+from users.models import StudentModel, TrainerModel
 
 
 class SectionModel(models.Model):
@@ -12,8 +12,8 @@ class SectionModel(models.Model):
     created_at = models.DateTimeField(default=now)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return f'Name: {self.name} | Owner: {self.owner}'
 
 
 class GroupModel(models.Model):
@@ -25,8 +25,8 @@ class GroupModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.name
+    def __str__(self) -> str:
+        return f'Name: {self.name} | Section: {self.section.name}'
 
 
 class LessonModel(models.Model):

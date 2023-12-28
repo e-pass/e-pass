@@ -1,14 +1,16 @@
-from typing import Any, Type
+from typing import Any
 
 from django.contrib.auth.base_user import BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
+
+from users.models import UserModel
 
 
 class UserModelManager(BaseUserManager):
     phone = PhoneNumberField
     use_in_migrations = True
 
-    def _create_user(self, phone_number: str, password: Any = None, **extra_fields: dict) -> Type['UserModel']:
+    def _create_user(self, phone_number: str, password: Any = None, **extra_fields: dict) -> 'UserModel':
         """
         Create and save a user with the given phone.
         """
@@ -22,12 +24,12 @@ class UserModelManager(BaseUserManager):
 
         return user
 
-    def create_user(self, phone_number: str, **extra_fields: Any) -> Type['UserModel']:
+    def create_user(self, phone_number: str, **extra_fields: Any) -> 'UserModel':
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(phone_number, **extra_fields)
 
-    def create_superuser(self, phone_number: str, password: Any, **extra_fields: Any) -> Type['UserModel']:
+    def create_superuser(self, phone_number: str, password: Any, **extra_fields: Any) -> 'UserModel':
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
