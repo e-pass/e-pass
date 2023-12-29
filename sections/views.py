@@ -1,8 +1,8 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
-from sections.models import SectionModel, GroupModel
-from sections.serializer import SectionSerializer, GroupSerializer
+from sections.models import GroupModel, SectionModel
+from sections.serializer import GroupSerializer, SectionSerializer
 
 
 class SectionViewSet(ModelViewSet):

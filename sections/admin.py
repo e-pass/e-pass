@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from .models import SectionModel, GroupModel
+from .models import GroupModel, SectionModel
 
 
 @admin.register(SectionModel)
