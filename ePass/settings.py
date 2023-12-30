@@ -248,7 +248,7 @@ REDIS_PORT = env('REDIS_PORT')
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
-# Logger. QSL-queries to console
+# Logger. SQL-queries to console
 LOGGING = {
     'version': 1,
     'handlers': {
