@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from sections.models import SectionModel, GroupModel
 from users.models import UserModel
+
 from users.serializer import UserModelSerializer
 
 

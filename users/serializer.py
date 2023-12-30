@@ -45,8 +45,8 @@ class UserModelSerializer(serializers.ModelSerializer):
     def update(self, instance: UserModel, validated_data: dict) -> UserModel:
         if validated_data.get('phone_number'):
             instance.is_phone_number_verified = False
-        instance = super(UserModelSerializer, self).update(instance, validated_data)
-        return instance
+
+        return super(UserModelSerializer, self).update(instance, validated_data)
 
     def validate_phone_number(self, phone_number: str) -> str:
         if UserModel.objects.filter(phone_number=phone_number).exists():
