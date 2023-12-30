@@ -11,6 +11,7 @@ class ShortUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ('id', 'first_name', 'last_name')
+        read_only_fields = ('id', 'first_name', 'last_name')
 
 
 class UserModelSerializer(serializers.ModelSerializer):
