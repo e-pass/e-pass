@@ -4,7 +4,7 @@ from django.core.validators import EmailValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from users.managers import UserModelManager, TrainerManager, StudentManager
+from users.managers import StudentManager, TrainerManager, UserModelManager
 
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
@@ -31,11 +31,11 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     last_login = models.DateTimeField(editable=False, null=True)
 
     USERNAME_FIELD = 'phone_number'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ('first_name', 'last_name',)
 
     objects = UserModelManager()
     trainers = TrainerManager()
     students = StudentManager()
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.first_name} {self.last_name}, {self.phone_number}'
