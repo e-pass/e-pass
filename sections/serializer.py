@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from sections.models import GroupModel, SectionModel
-from users.models import StudentModel, TrainerModel, UserModel
+from sections.models import SectionModel, GroupModel
+from users.models import UserModel
+
 from users.serializer import UserModelSerializer
 
 
@@ -13,14 +14,14 @@ class SectionSerializer(serializers.ModelSerializer):
     )
     trainers_ids = serializers.PrimaryKeyRelatedField(
         source='trainers',
-        queryset=TrainerModel.objects.all(),
+        queryset=UserModel.objects.all(),
         write_only=True,
         required=False,
         many=True
     )
     students_ids = serializers.PrimaryKeyRelatedField(
         source='students',
-        queryset=StudentModel.objects.all(),
+        queryset=UserModel.objects.all(),
         write_only=True,
         required=False,
         many=True

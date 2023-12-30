@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from users.models import StudentModel, TrainerModel, UserModel
+from users.models import UserModel
 
 
 @admin.register(UserModel)
@@ -9,13 +9,3 @@ class UserModelAdmin(admin.ModelAdmin):
                     'is_phone_number_verified', 'created_at', 'updated_at',)
     list_display_links = ('id', 'first_name', 'last_name', 'phone_number')
     readonly_fields = ('updated_at',)
-
-
-@admin.register(TrainerModel)
-class TrainerModelAdmin(UserModelAdmin):
-    pass
-
-
-@admin.register(StudentModel)
-class StudentModelAdmin(UserModelAdmin):
-    pass
