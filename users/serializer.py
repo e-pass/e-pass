@@ -7,6 +7,13 @@ from rest_framework import serializers
 from users.models import UserModel
 
 
+class ShortUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ('id', 'first_name', 'last_name')
+        read_only_fields = ('id', 'first_name', 'last_name')
+
+
 class UserModelSerializer(serializers.ModelSerializer):
     phone_number = PhoneNumberField(region=settings.PHONE_NUMBER_REGION, required=True)
     first_name = serializers.CharField(max_length=50, required=True)
