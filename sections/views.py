@@ -6,7 +6,7 @@ from users.permissions import IsTrainer, IsSectionOwner
 
 
 class SectionViewSet(ModelViewSet):
-    queryset = SectionModel.objects.all().prefetch_related('owner', 'trainers', 'students')
+    queryset = SectionModel.objects.all()
     serializer_class = SectionSerializer
 
     def get_permissions(self) -> list:
@@ -20,5 +20,5 @@ class SectionViewSet(ModelViewSet):
 
 
 class GroupViewSet(ModelViewSet):
-    queryset = GroupModel.objects.all().prefetch_related('trainers', 'students')
+    queryset = GroupModel.objects.all()
     serializer_class = GroupSerializer

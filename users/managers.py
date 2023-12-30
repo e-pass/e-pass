@@ -37,3 +37,13 @@ class UserModelManager(BaseUserManager):
             raise ValueError('Superuser must have is_superuser=True.')
 
         return self._create_user(phone_number, password, **extra_fields)
+
+
+class TrainerManager(UserModelManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_trainer=True)
+
+
+class StudentManager(UserModelManager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_trainer=False)

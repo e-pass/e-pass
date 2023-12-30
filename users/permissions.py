@@ -4,7 +4,7 @@ from django.views import View
 from rest_framework import permissions
 from rest_framework.request import Request
 
-from users.models import TrainerModel
+from users.models import UserModel
 
 
 class IsOwnerOrStaff(permissions.BasePermission):
@@ -39,4 +39,4 @@ class IsTrainer(permissions.BasePermission):
 
     def has_permission(self, request: Request, view: View) -> bool:
         phone_number = request.user.phone_number
-        return TrainerModel.objects.filter(phone_number=phone_number).exists()
+        return UserModel.trainers.filter(phone_number=phone_number).exists()
