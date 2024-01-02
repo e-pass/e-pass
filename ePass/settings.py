@@ -77,7 +77,8 @@ INSTALLED_APPS = [
     # Local apps
     'users',
     'sections',
-    'user_verification'
+    'user_verification',
+    'membership_passes'
 ]
 
 MIDDLEWARE = [
