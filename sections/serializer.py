@@ -13,14 +13,14 @@ class SectionSerializer(serializers.ModelSerializer):
     )
     trainers_ids = serializers.PrimaryKeyRelatedField(
         source='trainers',
-        queryset=UserModel.objects.all(),
+        queryset=UserModel.trainers.all(),
         write_only=True,
         required=False,
         many=True
     )
     students_ids = serializers.PrimaryKeyRelatedField(
         source='students',
-        queryset=UserModel.objects.all(),
+        queryset=UserModel.students.all(),
         write_only=True,
         required=False,
         many=True
@@ -33,6 +33,13 @@ class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectionModel
         fields = '__all__'
+
+
+class ShortSectionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SectionModel
+        fields = ('id', 'name', 'created_at', 'updated_at',)
 
 
 class GroupSerializer(serializers.ModelSerializer):

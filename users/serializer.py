@@ -25,23 +25,16 @@ class UserModelSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ('id', 'phone_number', 'first_name', 'last_name', 'is_trainer',
                   'is_phone_number_verified', 'student_parent_phone', 'student_parent_name',
-                  'trainer_section', 'trainer_groups', 'my_own_section',
-                  'student_section', 'student_groups', 'created_at', 'updated_at')
-        read_only_fields = ('my_own_section', 'trainer_section', 'student_section',
-                            'trainer_groups', 'student_groups')
+                  'created_at', 'updated_at')
 
     def to_representation(self, instance: UserModel) -> OrderedDict:
         """Скрывает некоторые поля модели, в зависимости от типа пользователя"""
 
         ret = super(UserModelSerializer, self).to_representation(instance)
         if instance.is_trainer:
-            for field in ['student_parent_phone', 'student_parent_name', 'student_section', 'student_groups']:
+            for field in ('student_parent_phone', 'student_parent_name',):
                 ret.pop(field)
-            if not ret.get('my_own_section'):
-                ret.pop('my_own_section')
-        else:
-            for field in ['trainer_section', 'trainer_groups', 'my_own_section']:
-                ret.pop(field)
+
         return ret
 
     def update(self, instance: UserModel, validated_data: dict) -> UserModel:

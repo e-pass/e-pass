@@ -6,9 +6,9 @@ from users.models import UserModel
 
 class SectionModel(models.Model):
     name = models.CharField(max_length=155)
-    owner = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, related_name='my_own_section')
-    trainers = models.ManyToManyField(to=UserModel, related_name='trainer_section')
-    students = models.ManyToManyField(to=UserModel, related_name='student_section')
+    owner = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, related_name='section')
+    trainers = models.ManyToManyField(to=UserModel, related_name='trainer')
+    students = models.ManyToManyField(to=UserModel, related_name='student')
     created_at = models.DateTimeField(default=now)
     updated_at = models.DateTimeField(auto_now=True)
 
