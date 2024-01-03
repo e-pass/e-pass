@@ -2,8 +2,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
 from users.models import UserModel
-from users.permissions import (
-    IsOwnerOrStaff)
+from users.permissions import IsOwnerOrStaff
 from users.serializer import UserModelSerializer
 
 
