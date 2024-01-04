@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -16,7 +17,6 @@ import environ
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 env = environ.Env(
     DEBUG=bool,
@@ -39,6 +39,11 @@ env = environ.Env(
     POSTGRES_PASSWORD=str,
     POSTGRES_DB_HOST=str,
     POSTGRES_DB_PORT=int,
+
+    # Logging
+    DJANGO_LOG_LEVEL=str,
+    API_REQUESTS_LOG_LEVEL=str,
+    DB_LOG_LEVEL=str,
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -88,6 +93,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'request_logging.middleware.LoggingMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -178,7 +184,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -248,20 +253,90 @@ REDIS_PORT = env('REDIS_PORT')
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
-# Logger. SQL-queries to console
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'formatters': {
+#         'simple': {
+#             'format': '%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s',
+#         },
+#     },
+#     'handlers': {
+#         'django_file': {
+#             'level': env('DJANGO_LOG_LEVEL'),
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+#             'formatter': 'simple',
+#         },
+#         'requests_file': {
+#             'level': env('API_REQUESTS_LOG_LEVEL'),
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'logs', 'requests.log'),
+#             'formatter': 'simple',
+#         },
+#         'database_file': {
+#             'level': env('DB_LOG_LEVEL'),
+#             'class': 'logging.FileHandler',
+#             'filename': os.path.join(BASE_DIR, 'logs', 'database.log'),
+#             'formatter': 'simple',
+#         },
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#             'formatter': 'simple',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['django_file'],
+#             'level': env('DJANGO_LOG_LEVEL'),
+#         },
+#         'django.db.backends': {
+#             'handlers': ['database_file', 'console'],
+#             'level': env('DB_LOG_LEVEL'),
+#         },
+#         'requests': {
+#             'handlers': ['requests_file'],
+#             'level': env('API_REQUESTS_LOG_LEVEL'),
+#         },
+#     },
+#     'root': {
+#         'handlers': ['django_file', 'requests_file', 'database_file', 'console'],
+#     }
+# }
+
 LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s',
+        },
+    },
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+        'requests_file': {
+            'level': env('API_REQUESTS_LOG_LEVEL'),
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'requests.log'),
+            'formatter': 'simple',
+        },
+        'database_file': {
+            'level': env('DB_LOG_LEVEL'),
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'database.log'),
+            'formatter': 'simple',
         },
     },
     'loggers': {
-        'django.db.backends': {
-            'level': 'DEBUG',
+        'requests': {
+            'handlers': ['requests_file'],
+            'level': env('API_REQUESTS_LOG_LEVEL'),
         },
+        'django.db.backends': {
+            'handlers': ['database_file'],
+            'level': env('DB_LOG_LEVEL'),
+        }
     },
     'root': {
-        'handlers': ['console'],
+        'handlers': ['requests_file', 'database_file'],
     }
 }
