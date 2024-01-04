@@ -16,7 +16,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50, blank=False)
     last_name = models.CharField(max_length=50, blank=False)
 
-    is_trainer = models.BooleanField(default=False)
+    is_trainer = models.BooleanField()
     is_phone_number_verified = models.BooleanField(default=False)
 
     student_parent_name = models.CharField(max_length=255, blank=True, null=True)
