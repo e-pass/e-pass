@@ -250,6 +250,8 @@ REDIS_PORT = env('REDIS_PORT')
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
+# settings.py
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -260,7 +262,7 @@ LOGGING = {
     },
     'handlers': {
         'django_file': {
-            'level': env('LOG_LEVEL'),
+            'level': env('DJANGO_LOG_LEVEL'),
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
             'maxBytes': 1024 * 1024 * 3,  # 3 MB
@@ -268,7 +270,7 @@ LOGGING = {
             'formatter': 'simple',
         },
         'requests_file': {
-            'level': env('LOG_LEVEL'),
+            'level': env('API_REQUESTS_LOG_LEVEL'),
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'request.log'),
             'maxBytes': 1024 * 1024 * 3,  # 3 MB
@@ -276,9 +278,17 @@ LOGGING = {
             'formatter': 'simple',
         },
         'database_file': {
-            'level': env('LOG_LEVEL'),
+            'level': env('DB_LOG_LEVEL'),
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'db.log'),
+            'maxBytes': 1024 * 1024 * 3,  # 3 MB
+            'backupCount': 3,
+            'formatter': 'simple',
+        },
+        'celery_file': {
+            'level': env('CELERY_LOG_LEVEL'),
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
             'maxBytes': 1024 * 1024 * 3,  # 3 MB
             'backupCount': 3,
             'formatter': 'simple',
@@ -287,17 +297,22 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['django_file'],
-            'level': env('LOG_LEVEL'),
+            'level': env('DJANGO_LOG_LEVEL'),
             'propagate': True,
         },
         'django.request': {
             'handlers': ['requests_file'],
-            'level': env('LOG_LEVEL'),
+            'level': env('API_REQUESTS_LOG_LEVEL'),
             'propagate': True,
         },
         'django.db.backends': {
             'handlers': ['database_file'],
-            'level': env('LOG_LEVEL'),
-        }
+            'level': env('DB_LOG_LEVEL'),
+        },
+        'celery': {
+            'handlers': ['celery_file'],
+            'level': env('CELERY_LOG_LEVEL'),
+            'propagate': True,
+        },
     },
 }
