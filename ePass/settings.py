@@ -41,9 +41,7 @@ env = environ.Env(
     POSTGRES_DB_PORT=int,
 
     # Logging
-    DJANGO_LOG_LEVEL=str,
-    API_REQUESTS_LOG_LEVEL=str,
-    DB_LOG_LEVEL=str,
+    LOG_LEVEL=str,
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -252,7 +250,6 @@ REDIS_PORT = env('REDIS_PORT')
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -263,10 +260,26 @@ LOGGING = {
     },
     'handlers': {
         'django_file': {
-            'level': env('DJANGO_LOG_LEVEL'),
+            'level': env('LOG_LEVEL'),
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'maxBytes': 1024 * 1024,  # 1 MB
+            'maxBytes': 1024 * 1024 * 3,  # 3 MB
+            'backupCount': 1,
+            'formatter': 'simple',
+        },
+        'requests_file': {
+            'level': env('LOG_LEVEL'),
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'request.log'),
+            'maxBytes': 1024 * 1024 * 3,  # 3 MB
+            'backupCount': 3,
+            'formatter': 'simple',
+        },
+        'database_file': {
+            'level': env('LOG_LEVEL'),
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'db.log'),
+            'maxBytes': 1024 * 1024 * 3,  # 3 MB
             'backupCount': 3,
             'formatter': 'simple',
         },
@@ -274,11 +287,17 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['django_file'],
-            'level': env('DJANGO_LOG_LEVEL'),
+            'level': env('LOG_LEVEL'),
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['requests_file'],
+            'level': env('LOG_LEVEL'),
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['database_file'],
+            'level': env('LOG_LEVEL'),
+        }
     },
-    'root': {
-        'handlers': ['django_file'],
-    }
 }
