@@ -93,7 +93,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'request_logging.middleware.LoggingMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -253,90 +252,33 @@ REDIS_PORT = env('REDIS_PORT')
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     'formatters': {
-#         'simple': {
-#             'format': '%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s',
-#         },
-#     },
-#     'handlers': {
-#         'django_file': {
-#             'level': env('DJANGO_LOG_LEVEL'),
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-#             'formatter': 'simple',
-#         },
-#         'requests_file': {
-#             'level': env('API_REQUESTS_LOG_LEVEL'),
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'logs', 'requests.log'),
-#             'formatter': 'simple',
-#         },
-#         'database_file': {
-#             'level': env('DB_LOG_LEVEL'),
-#             'class': 'logging.FileHandler',
-#             'filename': os.path.join(BASE_DIR, 'logs', 'database.log'),
-#             'formatter': 'simple',
-#         },
-#         'console': {
-#             'class': 'logging.StreamHandler',
-#             'formatter': 'simple',
-#         },
-#     },
-#     'loggers': {
-#         'django': {
-#             'handlers': ['django_file'],
-#             'level': env('DJANGO_LOG_LEVEL'),
-#         },
-#         'django.db.backends': {
-#             'handlers': ['database_file', 'console'],
-#             'level': env('DB_LOG_LEVEL'),
-#         },
-#         'requests': {
-#             'handlers': ['requests_file'],
-#             'level': env('API_REQUESTS_LOG_LEVEL'),
-#         },
-#     },
-#     'root': {
-#         'handlers': ['django_file', 'requests_file', 'database_file', 'console'],
-#     }
-# }
 
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'simple': {
-            'format': '%(levelname)s %(asctime)s %(name)s.%(funcName)s:%(lineno)s- %(message)s',
+            'format': '[%(levelname)s - %(asctime)s] %(name)s.%(funcName)s:%(lineno)s- %(message)s',
         },
     },
     'handlers': {
-        'requests_file': {
-            'level': env('API_REQUESTS_LOG_LEVEL'),
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'requests.log'),
-            'formatter': 'simple',
-        },
-        'database_file': {
-            'level': env('DB_LOG_LEVEL'),
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'database.log'),
+        'django_file': {
+            'level': env('DJANGO_LOG_LEVEL'),
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
+            'maxBytes': 1024 * 1024,  # 1 MB
+            'backupCount': 3,
             'formatter': 'simple',
         },
     },
     'loggers': {
-        'requests': {
-            'handlers': ['requests_file'],
-            'level': env('API_REQUESTS_LOG_LEVEL'),
+        'django': {
+            'handlers': ['django_file'],
+            'level': env('DJANGO_LOG_LEVEL'),
+            'propagate': True,
         },
-        'django.db.backends': {
-            'handlers': ['database_file'],
-            'level': env('DB_LOG_LEVEL'),
-        }
     },
     'root': {
-        'handlers': ['requests_file', 'database_file'],
+        'handlers': ['django_file'],
     }
 }
