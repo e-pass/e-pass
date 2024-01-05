@@ -6,6 +6,7 @@ from django.core import validators
 
 
 class PassModel(models.Model):
+    name = models.CharField(max_length=255)
     student = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, related_name='my_passes')
     section = models.ForeignKey(to=SectionModel, on_delete=models.CASCADE, related_name='section_passes')
     group = models.ForeignKey(to=GroupModel, on_delete=models.CASCADE, related_name='group_passes')
@@ -17,6 +18,7 @@ class PassModel(models.Model):
     valid_from = models.DateField()
     valid_until = models.DateField()
     price = models.DecimalField(max_digits=8, decimal_places=2)
+    is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

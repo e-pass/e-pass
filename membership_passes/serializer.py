@@ -27,21 +27,20 @@ class ShortLessonSerializer(serializers.ModelSerializer):
 
 
 class PassSerializer(serializers.ModelSerializer):
-    student = ShortUserSerializer(read_only=True)
-    section = ShortSectionSerializer(read_only=True)
-    group = ShortGroupSerializer(read_only=True)
     quantity_lessons_max = serializers.IntegerField(default=0)
     is_unlimited = serializers.BooleanField(default=False)
-    unused_lessons = serializers.IntegerField(read_only=True)
-    lessons = ShortLessonSerializer(read_only=True, many=True)
+    unused_lessons = serializers.SerializerMethodField()
     price = serializers.DecimalField(max_digits=8, decimal_places=2)
     is_active = serializers.BooleanField(default=True)
 
     class Meta:
         model = PassModel
-        fields = ('id', 'student', 'section', 'group', 'qr_code', 'is_unlimited',
+        fields = ('id', 'name', 'student', 'section', 'group', 'qr_code', 'is_unlimited',
                   'quantity_lessons_max', 'unused_lessons', 'lessons',
-                  'is_active', 'valid_from', 'valid_until', 'price')
+                  'is_active', 'valid_from', 'valid_until', 'price', 'is_paid')
+
+    def get_unused_lessons(self, instance: PassModel) -> int:
+        return instance.quantity_lessons_max - len(instance.lessons.all())
 
     def to_representation(self, instance: PassModel) -> OrderedDict:
         ret = super(PassSerializer, self).to_representation(instance)
