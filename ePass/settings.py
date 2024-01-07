@@ -39,9 +39,6 @@ env = environ.Env(
     POSTGRES_PASSWORD=str,
     POSTGRES_DB_HOST=str,
     POSTGRES_DB_PORT=int,
-
-    # Logging
-    LOG_LEVEL=str,
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -262,7 +259,7 @@ LOGGING = {
     },
     'handlers': {
         'django_file': {
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
             'maxBytes': 1024 * 1024 * 3,  # 3 MB
@@ -270,7 +267,7 @@ LOGGING = {
             'formatter': 'simple',
         },
         'requests_file': {
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'request.log'),
             'maxBytes': 1024 * 1024 * 3,  # 3 MB
@@ -278,7 +275,7 @@ LOGGING = {
             'formatter': 'simple',
         },
         'database_file': {
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'db.log'),
             'maxBytes': 1024 * 1024 * 3,  # 3 MB
@@ -286,7 +283,7 @@ LOGGING = {
             'formatter': 'simple',
         },
         'celery_file': {
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
             'maxBytes': 1024 * 1024 * 3,  # 3 MB
@@ -297,21 +294,21 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['django_file'],
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
             'propagate': True,
         },
         'django.request': {
             'handlers': ['requests_file'],
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
             'propagate': True,
         },
         'django.db.backends': {
             'handlers': ['database_file'],
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
         },
         'celery': {
             'handlers': ['celery_file'],
-            'level': env('LOG_LEVEL'),
+            'level': 'INFO',
             'propagate': True,
         },
     },
