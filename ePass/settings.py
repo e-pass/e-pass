@@ -247,8 +247,6 @@ REDIS_PORT = env('REDIS_PORT')
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
-# settings.py
-
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -258,6 +256,14 @@ LOGGING = {
         },
     },
     'handlers': {
+        'auth_log': {
+            'level': 'INFO',
+            'filename': os.path.join(BASE_DIR, 'logs', 'auth.log'),
+            'formatter': 'main',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
+            'backupCount': 5,  # Number of backup files to keep
+        },
         'requests_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -284,6 +290,11 @@ LOGGING = {
         },
     },
     'loggers': {
+        'auth': {
+            'handlers': ['auth_log'],
+            'level': 'INFO',
+            'propagate': True
+        },
         'django.request': {
             'handlers': ['requests_file'],
             'level': 'INFO',
