@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -16,7 +17,6 @@ import environ
 from dotenv import load_dotenv
 
 load_dotenv()
-
 
 env = environ.Env(
     DEBUG=bool,
@@ -179,7 +179,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -249,20 +248,68 @@ REDIS_PORT = env('REDIS_PORT')
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 
-# Logger. SQL-queries to console
 LOGGING = {
     'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'simple': {
+            'format': '[%(levelname)s - %(asctime)s] %(name)s.%(funcName)s:%(lineno)s- %(message)s',
+        },
+    },
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+        'auth_log': {
+            'level': 'INFO',
+            'filename': os.path.join(BASE_DIR, 'logs', 'auth.log'),
+            'formatter': 'main',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'maxBytes': 1024 * 1024 * 10,  # 10 MB
+            'backupCount': 5,  # Number of backup files to keep
+        },
+        'requests_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'request.log'),
+            'maxBytes': 1024 * 1024 * 3,  # 3 MB
+            'backupCount': 3,
+            'formatter': 'simple',
+        },
+        'database_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'db.log'),
+            'maxBytes': 1024 * 1024 * 3,  # 3 MB
+            'backupCount': 3,
+            'formatter': 'simple',
+        },
+        'celery_file': {
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
+            'maxBytes': 1024 * 1024 * 3,  # 3 MB
+            'backupCount': 3,
+            'formatter': 'simple',
         },
     },
     'loggers': {
+        'auth': {
+            'handlers': ['auth_log'],
+            'level': 'INFO',
+            'propagate': True
+        },
+        'django.request': {
+            'handlers': ['requests_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
         'django.db.backends': {
-            'level': 'DEBUG',
+            'handlers': ['database_file'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['celery_file'],
+            'level': 'INFO',
+            'propagate': True,
         },
     },
-    'root': {
-        'handlers': ['console'],
-    }
 }
