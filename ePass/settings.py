@@ -258,14 +258,6 @@ LOGGING = {
         },
     },
     'handlers': {
-        'django_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'django.log'),
-            'maxBytes': 1024 * 1024 * 3,  # 3 MB
-            'backupCount': 1,
-            'formatter': 'simple',
-        },
         'requests_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -292,11 +284,6 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django': {
-            'handlers': ['django_file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
         'django.request': {
             'handlers': ['requests_file'],
             'level': 'INFO',
@@ -305,6 +292,7 @@ LOGGING = {
         'django.db.backends': {
             'handlers': ['database_file'],
             'level': 'INFO',
+            'propagate': True,
         },
         'celery': {
             'handlers': ['celery_file'],
