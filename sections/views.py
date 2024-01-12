@@ -17,6 +17,7 @@ class SectionViewSet(ModelViewSet):
     queryset = SectionModel.objects.all()
     serializer_class = SectionSerializer
     lookup_url_kwarg = 'section_id'
+    search_fields = ('^name',)
 
     def get_permissions(self) -> list:
         method = self.request.method

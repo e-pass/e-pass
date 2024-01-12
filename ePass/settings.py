@@ -17,7 +17,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 env = environ.Env(
     DEBUG=bool,
     SECRET_KEY=str,
@@ -73,6 +72,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'drf_standardized_errors',
     'django_celery_results',
+    'django_filters',
 
     # Local apps
     'users',
@@ -100,6 +100,11 @@ REST_FRAMEWORK = {
     'EXCEPTION_HANDLER': 'drf_standardized_errors.handler.exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'ePass.core.CustomPagination.CustomPagination',
     'PAGE_SIZE': 15,
+    'DEFAULT_FILTER_BACKENDS': [
+        'rest_framework.filters.SearchFilter',
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
+    'SEARCH_PARAM': 'search',
 }
 
 DRF_STANDARDIZED_ERRORS = {
@@ -177,7 +182,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
