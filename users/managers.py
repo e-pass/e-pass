@@ -40,10 +40,10 @@ class UserModelManager(BaseUserManager):
 
 
 class TrainerManager(UserModelManager):
-    def get_queryset(self):
+    def get_queryset(self) -> Any:
         return super().get_queryset().filter(is_trainer=True)
 
 
 class StudentManager(UserModelManager):
-    def get_queryset(self):
+    def get_queryset(self) -> Any:
         return super().get_queryset().filter(is_trainer=False)

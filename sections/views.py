@@ -41,7 +41,7 @@ class GroupListCreateAPIView(generics.ListCreateAPIView):
         section_id = self.kwargs.get(self.lookup_url_kwarg)
         return GroupModel.objects.filter(section_id=section_id)
 
-    def perform_create(self, serializer) -> None:
+    def perform_create(self, serializer: GroupSerializer) -> None:
         section_id = self.kwargs.get(self.lookup_url_kwarg)
         section = get_object_or_404(SectionModel, id=section_id)
         serializer.save(section=section)
@@ -56,7 +56,7 @@ class GroupRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     lookup_url_kwarg = 'group_id'
     section_lookup_url_kwarg = 'section_id'
 
-    def get_object(self):
+    def get_object(self) -> Any:
         section_id = self.kwargs.get(self.section_lookup_url_kwarg)
         group_id = self.kwargs.get(self.lookup_url_kwarg)
         return get_object_or_404(GroupModel, section_id=section_id, id=group_id)
