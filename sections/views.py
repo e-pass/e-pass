@@ -36,6 +36,7 @@ class SectionViewSet(ModelViewSet):
 class GroupListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
     lookup_url_kwarg = 'section_id'
+    search_fields = ('^name',)
 
     def get_queryset(self) -> QuerySet:
         section_id = self.kwargs.get(self.lookup_url_kwarg)

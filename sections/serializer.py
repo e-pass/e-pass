@@ -58,17 +58,9 @@ class SectionSerializer(serializers.ModelSerializer):
         required=False,
         many=True
     )
-    students_ids = serializers.PrimaryKeyRelatedField(
-        source='students',
-        queryset=UserModel.students.all(),
-        write_only=True,
-        required=False,
-        many=True
-    )
 
     owner = UserModelSerializer(read_only=True)
     trainers = UserModelSerializer(many=True, read_only=True)
-    students = UserModelSerializer(many=True, read_only=True)
     groups = ShortGroupSerializer(many=True, read_only=True)
 
     class Meta:
