@@ -4,6 +4,8 @@ from sections.models import GroupModel, SectionModel
 from users.models import UserModel
 from users.serializer import UserModelSerializer
 
+from typing import Any
+
 
 class ShortSectionSerializer(serializers.ModelSerializer):
 
@@ -30,6 +32,15 @@ class GroupSerializer(serializers.ModelSerializer):
 
     trainers = UserModelSerializer(many=True, read_only=True)
     students = UserModelSerializer(many=True, read_only=True)
+
+    def validate_trainers_ids(self, value: Any) -> Any:
+        section_trainers = self.instance.section.trainers.all()
+        invalid_trainers = set(value) - set(section_trainers)
+
+        if invalid_trainers:
+            raise serializers.ValidationError('Выбранные тренера не состоят в секции')
+
+        return value
 
     class Meta:
         model = GroupModel
