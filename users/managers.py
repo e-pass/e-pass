@@ -1,12 +1,30 @@
 from typing import Any, Type
+from django.db import models
+
 
 from django.contrib.auth.base_user import BaseUserManager
 from phonenumber_field.modelfields import PhoneNumberField
 
 
+class UserQuerySet(models.query.QuerySet):
+    def search(self, query: str) -> Type['UserQuerySet']:
+        lookups = (
+            models.Q(phone_number__contains=query) |
+            models.Q(first_name__icontains=query) |
+            models.Q(last_name__icontains=query)
+        )
+        return self.filter(lookups).distinct()
+
+
 class UserModelManager(BaseUserManager):
     phone = PhoneNumberField
     use_in_migrations = True
+
+    def get_queryset(self) -> UserQuerySet:
+        return UserQuerySet(self.model, using=self._db)
+
+    def search(self, query: str) -> Type['UserQuerySet']:
+        return self.get_queryset().search(query)
 
     def _create_user(self, phone_number: str, password: Any = None, **extra_fields: dict) -> Type['UserModel']:
         """
