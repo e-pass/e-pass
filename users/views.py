@@ -9,6 +9,8 @@ from users.serializer import UserModelSerializer
 class UserViewSet(ModelViewSet):
     queryset = UserModel.objects.all()
     serializer_class = UserModelSerializer
+    search_fields = ('^phone_number',)
+    filterset_fields = ('is_trainer',)
 
     def get_permissions(self) -> list:
         method = self.request.method
