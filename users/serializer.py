@@ -10,8 +10,8 @@ from users.models import UserModel
 class ShortUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
-        fields = ('id', 'first_name', 'last_name')
-        read_only_fields = ('id', 'first_name', 'last_name')
+        fields = ('id', 'first_name', 'last_name', 'phone_number')
+        read_only_fields = ('id', 'first_name', 'last_name', 'phone_number')
 
 
 class UserModelSerializer(serializers.ModelSerializer):
