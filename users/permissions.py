@@ -34,9 +34,15 @@ class IsGroupTrainerOrAccountOwnerOrStaff(permissions.BasePermission):
         ))
 
 
-class IsTrainer(permissions.BasePermission):
-    """Проверка, является ли пользователь тренером"""
+# class IsTrainer(permissions.BasePermission):
+#     """Проверка, является ли пользователь тренером"""
+#
+#     def has_permission(self, request: Request, view: View) -> bool:
+#         phone_number = request.user.phone_number
+#         return UserModel.trainers.filter(phone_number=phone_number).exists()
 
+
+class IsTrainer(permissions.BasePermission):
+    """Простая проверка, является ли пользователь тренером"""
     def has_permission(self, request: Request, view: View) -> bool:
-        phone_number = request.user.phone_number
-        return UserModel.trainers.filter(phone_number=phone_number).exists()
+        return request.user.is_trainer
