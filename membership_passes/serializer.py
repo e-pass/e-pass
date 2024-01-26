@@ -1,4 +1,3 @@
-import datetime
 from typing import OrderedDict
 from django.conf import settings
 
@@ -6,7 +5,7 @@ from django.contrib.auth.backends import UserModel
 from rest_framework import serializers, validators
 
 from membership_passes.models import PassModel
-from users.serializers import ShortUserSerializer
+from users.serializer import ShortUserSerializer
 
 from membership_passes.services import _check_expiration_total
 
