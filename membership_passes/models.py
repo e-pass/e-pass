@@ -1,4 +1,4 @@
-from membership_passes.services import _check_expiration_date
+from membership_passes.validation import _check_expiration_date
 
 from django.contrib.auth.backends import UserModel
 from django.db import models

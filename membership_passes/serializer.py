@@ -7,7 +7,7 @@ from rest_framework import serializers, validators
 from membership_passes.models import PassModel
 from users.serializer import ShortUserSerializer
 
-from membership_passes.services import _check_expiration_total
+from membership_passes.validation import _check_expiration_total
 
 
 class PassSerializer(serializers.ModelSerializer):

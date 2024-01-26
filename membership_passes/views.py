@@ -7,8 +7,8 @@ from rest_framework.serializers import ModelSerializer
 
 from membership_passes.models import PassModel
 from membership_passes.serializer import PassSerializer, CreatePassSerializer
-from membership_passes.services import (_check_object_entry_in_db_by_id,
-                                        _check_object_for_expiration_date, _check_expiration_date)
+from membership_passes.validation import (_check_object_entry_in_db_by_id,
+                                          _check_object_for_expiration_date, _check_expiration_date)
 from sections.models import LessonModel
 from users.models import UserModel
 from sections.models import SectionModel
