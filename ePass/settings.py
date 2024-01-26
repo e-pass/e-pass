@@ -79,7 +79,7 @@ INSTALLED_APPS = [
     'users',
     'sections',
     'user_verification',
-    'membership_passes'
+    'membership_passes',
 ]
 
 MIDDLEWARE = [
@@ -108,6 +108,13 @@ REST_FRAMEWORK = {
         'django_filters.rest_framework.DjangoFilterBackend',
     ],
     'SEARCH_PARAM': 'search',
+    'DATE_INPUT_FORMATS': [
+        '%d.%m.%Y',  # '25.10.2021'
+        '%d.%m.%y',  # '25.10.21'
+        '%d-%m-%Y',  # '25-10-2021'
+        '%d-%m-%y',  # '25-10-21'
+        '%Y-%m-%d'   # '2021-10-25'
+    ],
 }
 
 DRF_STANDARDIZED_ERRORS = {
