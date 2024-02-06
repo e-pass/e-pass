@@ -197,6 +197,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR / 'static/')
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+
+# Media
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -271,14 +279,6 @@ LOGGING = {
         },
     },
     'handlers': {
-        'auth_log': {
-            'level': 'INFO',
-            'filename': os.path.join(BASE_DIR, 'logs', 'auth.log'),
-            'formatter': 'main',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'maxBytes': 1024 * 1024 * 10,  # 10 MB
-            'backupCount': 5,  # Number of backup files to keep
-        },
         'requests_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -295,21 +295,8 @@ LOGGING = {
             'backupCount': 3,
             'formatter': 'simple',
         },
-        'celery_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
-            'maxBytes': 1024 * 1024 * 3,  # 3 MB
-            'backupCount': 3,
-            'formatter': 'simple',
-        },
     },
     'loggers': {
-        'auth': {
-            'handlers': ['auth_log'],
-            'level': 'INFO',
-            'propagate': True
-        },
         'django.request': {
             'handlers': ['requests_file'],
             'level': 'INFO',
@@ -317,11 +304,6 @@ LOGGING = {
         },
         'django.db.backends': {
             'handlers': ['database_file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'celery': {
-            'handlers': ['celery_file'],
             'level': 'INFO',
             'propagate': True,
         },
