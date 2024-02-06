@@ -279,14 +279,6 @@ LOGGING = {
             'backupCount': 3,
             'formatter': 'simple',
         },
-        'celery_file': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs', 'celery.log'),
-            'maxBytes': 1024 * 1024 * 3,  # 3 MB
-            'backupCount': 3,
-            'formatter': 'simple',
-        },
     },
     'loggers': {
         'django.request': {
@@ -296,11 +288,6 @@ LOGGING = {
         },
         'django.db.backends': {
             'handlers': ['database_file'],
-            'level': 'INFO',
-            'propagate': True,
-        },
-        'celery': {
-            'handlers': ['celery_file'],
             'level': 'INFO',
             'propagate': True,
         },
