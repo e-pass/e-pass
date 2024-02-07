@@ -31,6 +31,8 @@ celery -A ePass.celery worker -l INFO
 
 ### Docker Start ###
 
+* Update .env file
+
 ```commandline
 docker-compose build
 docker-compose up
