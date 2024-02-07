@@ -1,6 +1,7 @@
 import random
 
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
@@ -12,13 +13,13 @@ from users.models import UserModel
 class ConfirmationCodeSerializer(serializers.Serializer):
     phone_number = PhoneNumberField(region=settings.PHONE_NUMBER_REGION, required=True)
 
-    def create(self, validated_data: dict) -> dict:
+    def save(self, validated_data: dict) -> int:
         phone_number = validated_data.get('phone_number')
         code = self.__generate_confirmation_code()
-        user = UserModel.objects.get(phone_number=phone_number)
+        user = get_user_model().objects.get(phone_number=phone_number)
         ConfirmationCodeModel.objects.create(user=user, code=f'{code}')
         sms_result = send_sms_with_code(phone_number=phone_number, code=code)
-        return sms_result
+        return code
 
     @staticmethod
     def validate_phone_number(phone_number: str) -> str:
