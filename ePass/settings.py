@@ -99,7 +99,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',
     ),
     'EXCEPTION_HANDLER': 'drf_standardized_errors.handler.exception_handler',
-    'DEFAULT_PAGINATION_CLASS': 'ePass.core.CustomPagination.CustomPagination',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15,
     'DEFAULT_FILTER_BACKENDS': [
         'rest_framework.filters.SearchFilter',
