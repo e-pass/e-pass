@@ -4,6 +4,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import AuthUser
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -12,20 +13,18 @@ from user_verification.serializer import (ConfirmationCodeSerializer,
                                           VerifyCodeSerializer)
 
 
-class SendConfirmationCodeView(viewsets.ViewSet):
+# TODO: return SMS confirmation
+class SendConfirmationCodeView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = ConfirmationCodeSerializer
 
-    def create(self, request: Request, *args: Any, **kwargs: dict) -> Response:
-        serializer = self.serializer_class(data=request.data)
+    def post(self, request: Request, *args: Any, **kwargs: dict) -> Response:
+        serializer = ConfirmationCodeSerializer(data=request.data)
         if serializer.is_valid():
-            data = serializer.save()
-            if data['server_status'] == 200 and data['message_status']['status_code'] == 100:
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response(data={'message': 'Message failed to send', 'details': data},
-                            status=status.HTTP_400_BAD_REQUEST)
+            code = serializer.save(validated_data=serializer.validated_data)
+            return Response(data={'code': code}, status=status.HTTP_200_OK)
 
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class VerifyConfirmationCode(viewsets.ViewSet):
