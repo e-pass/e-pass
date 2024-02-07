@@ -309,3 +309,6 @@ LOGGING = {
         },
     },
 }
+
+# Set check-in pause
+CHECK_IN_FREQUENCY = timedelta(hours=6)
