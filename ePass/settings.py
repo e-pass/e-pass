@@ -111,7 +111,7 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    ],
     'DATE_INPUT_FORMATS': [
         '%d.%m.%Y',  # '25.10.2021'
         '%d.%m.%y',  # '25.10.21'
