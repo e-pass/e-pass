@@ -7,9 +7,9 @@ from rest_framework import serializers, validators
 from membership_passes.models import PassModel, EntryModel
 from users.serializer import ShortUserSerializer
 
-from membership_passes.validation import (_check_expiration_total,
-                                          _check_existing_passes,
-                                          _check_pass_before_check_in)
+from membership_passes.validation import (check_expiration_total,
+                                          check_existing_passes,
+                                          check_pass_before_check_in)
 
 
 class EntrySerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class EntrySerializer(serializers.ModelSerializer):
         fields = ('to_pass_id',)
 
     def validate(self, attrs):
-        pass_obj = _check_pass_before_check_in(attrs['to_pass_id'])
+        pass_obj = check_pass_before_check_in(attrs['to_pass_id'])
         attrs['to_pass'] = pass_obj
         return attrs
 
@@ -76,14 +76,14 @@ class CreatePassSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         print(f'attrs: {attrs}')
         if self.context.get("request").method == 'POST':
-            _check_expiration_total(valid_from=attrs['valid_from'], valid_until=attrs['valid_until'])
+            check_expiration_total(valid_from=attrs['valid_from'], valid_until=attrs['valid_until'])
             if attrs['quantity_lessons_max'] == 0 and attrs['is_unlimited'] is False:
                 raise serializers.ValidationError("Установите максимальное количество уроков,"
                                                   " или активируйте поле 'Безлимитный'")
         return attrs
 
     def create(self, validated_data):
-        _check_existing_passes(validated_data)
+        check_existing_passes(validated_data)
         return super(CreatePassSerializer, self).create(validated_data)
 
     def update(self, instance, validated_data):
@@ -93,8 +93,8 @@ class CreatePassSerializer(serializers.ModelSerializer):
         valid_until = validated_data.get('valid_until', instance.valid_until)
         pass_id = instance.id
 
-        _check_expiration_total(valid_from, valid_until)
-        _check_existing_passes({
+        check_expiration_total(valid_from, valid_until)
+        check_existing_passes({
             'student': student,
             'section': section,
             'valid_from': valid_from,

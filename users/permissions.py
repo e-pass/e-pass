@@ -46,3 +46,18 @@ class IsTrainer(permissions.BasePermission):
     """Простая проверка, является ли пользователь тренером"""
     def has_permission(self, request: Request, view: View) -> bool:
         return request.user.is_trainer
+
+class IsPassStudentOrTrainerOrSectionOwner(permissions.BasePermission):
+    """Права на абонемент для студента, тренера или владельца секции"""
+
+    def has_object_permission(self, request: Request, view: View, obj: Any)-> bool:
+        return any((request.user == obj.student, request.user in obj.section.trainers.all(),
+                    request.user == obj.section.owner))
+
+
+class IsTrainerOrSectionOwner(permissions.BasePermission):
+    """Права на абонемент для тренера или владельца секции"""
+
+    def has_object_permission(self, request: Request, view: View, obj: Any) -> bool:
+        return any((request.user in obj.section.trainers.all(),
+                    request.user == obj.section.owner))

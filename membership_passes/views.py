@@ -10,10 +10,11 @@ from rest_framework.request import Request
 from rest_framework.serializers import ModelSerializer
 
 from membership_passes.models import PassModel, EntryModel
-from membership_passes.permissions import IsPassStudentOrTrainerOrSectionOwner, IsTrainerOrSectionOwner, IsTrainer
 from membership_passes.serializer import PassSerializer, CreatePassSerializer, EntrySerializer
-from membership_passes.validation import _get_section_object_from_db, _check_expiration_date
+from membership_passes.validation import get_section_object_from_db, check_expiration_date
 from users.models import UserModel
+from users.permissions import IsPassStudentOrTrainerOrSectionOwner, IsTrainerOrSectionOwner, IsTrainer
+
 
 
 class EntryCreateView(generics.CreateAPIView):
@@ -45,11 +46,11 @@ class PassListCreateView(generics.ListCreateAPIView):
         return CreatePassSerializer
 
     def dispatch(self, request: Request, *args: Any, **kwargs: Any) -> Any:
-        _get_section_object_from_db(self.kwargs['section_id'])
+        get_section_object_from_db(self.kwargs['section_id'])
         return super(PassListCreateView, self).dispatch(request, *args, **kwargs)
 
     def perform_create(self, serializer: ModelSerializer) -> None:
-        section = _get_section_object_from_db(section_id=self.kwargs['section_id'], need_return=True)
+        section = get_section_object_from_db(section_id=self.kwargs['section_id'], need_return=True)
         serializer.validated_data['section'] = section
         serializer.save()
 
@@ -90,7 +91,7 @@ class PassRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
         if not instance.is_active:
             message = 'Обновление невозможно. Абонемент заблокирован'
-            if not _check_expiration_date(instance.valid_until):
+            if not check_expiration_date(instance.valid_until):
                 message = 'Обновление невозможно. Срок действия абонемента закончился'
             return JsonResponse(data={'message': message}, status=status.HTTP_406_NOT_ACCEPTABLE)
 

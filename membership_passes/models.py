@@ -1,4 +1,4 @@
-from membership_passes.validation import _check_expiration_date
+from membership_passes.validation import check_expiration_date
 
 from django.contrib.auth.backends import UserModel
 from django.db import models
@@ -36,7 +36,7 @@ class PassModel(models.Model):
             self.quantity_unused_lessons = self.quantity_lessons_max
 
         if self.is_active:
-            self.is_active = _check_expiration_date(self.valid_until)
+            self.is_active = check_expiration_date(self.valid_until)
         super(PassModel, self).save(*args, **kwargs)
 
 
