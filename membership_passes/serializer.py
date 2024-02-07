@@ -4,21 +4,38 @@ from django.conf import settings
 from django.contrib.auth.backends import UserModel
 from rest_framework import serializers, validators
 
-from membership_passes.models import PassModel
+from membership_passes.models import PassModel, EntryModel
 from users.serializer import ShortUserSerializer
 
-from membership_passes.validation import _check_expiration_total
+from membership_passes.validation import (_check_expiration_total,
+                                          _check_existing_passes,
+                                          _check_pass_before_check_in)
+
+
+class EntrySerializer(serializers.ModelSerializer):
+    to_pass_id = serializers.IntegerField()
+    class Meta:
+        model = EntryModel
+        fields = ('to_pass_id',)
+
+    def validate(self, attrs):
+        pass_obj = _check_pass_before_check_in(attrs['to_pass_id'])
+        attrs['to_pass'] = pass_obj
+        return attrs
+
+
 
 
 class PassSerializer(serializers.ModelSerializer):
     student = ShortUserSerializer(read_only=True)
+    quantity_unused_lessons = serializers.IntegerField(read_only=True)
     valid_from = serializers.DateField(format=settings.REST_FRAMEWORK.get('DATE_INPUT_FORMATS')[0])
     valid_until = serializers.DateField(format=settings.REST_FRAMEWORK.get('DATE_INPUT_FORMATS')[0])
 
     class Meta:
         model = PassModel
         fields = ('id', 'name', 'student', 'section_id', 'qr_code', 'is_unlimited',
-                  'quantity_lessons_max', 'quantity_unused_lessons', 'lessons',
+                  'quantity_lessons_max', 'quantity_unused_lessons', 'entries',
                   'is_active', 'valid_from', 'valid_until', 'price', 'is_paid')
 
     def to_representation(self, instance: PassModel) -> OrderedDict:
@@ -53,22 +70,36 @@ class CreatePassSerializer(serializers.ModelSerializer):
     class Meta:
         model = PassModel
         fields = ('name', 'student_id', 'is_unlimited', 'qr_code',
-                  'quantity_lessons_max', 'quantity_unused_lessons',
+                  'quantity_lessons_max',
                   'valid_from', 'valid_until', 'price', 'is_paid')
 
     def validate(self, attrs):
+        print(f'attrs: {attrs}')
         if self.context.get("request").method == 'POST':
-            if not _check_expiration_total(valid_from=attrs['valid_from'], valid_until=attrs['valid_until']):
-                raise serializers.ValidationError("Введён некорректный период действия.")
+            _check_expiration_total(valid_from=attrs['valid_from'], valid_until=attrs['valid_until'])
             if attrs['quantity_lessons_max'] == 0 and attrs['is_unlimited'] is False:
                 raise serializers.ValidationError("Установите максимальное количество уроков,"
                                                   " или активируйте поле 'Безлимитный'")
         return attrs
 
+    def create(self, validated_data):
+        _check_existing_passes(validated_data)
+        return super(CreatePassSerializer, self).create(validated_data)
+
     def update(self, instance, validated_data):
+        student = validated_data.get('student', instance.student)
+        section = validated_data.get('section', instance.section)
         valid_from = validated_data.get('valid_from', instance.valid_from)
         valid_until = validated_data.get('valid_until', instance.valid_until)
-        if not _check_expiration_total(valid_from, valid_until):
-            raise serializers.ValidationError("Введён некорректный период действия.")
+        pass_id = instance.id
+
+        _check_expiration_total(valid_from, valid_until)
+        _check_existing_passes({
+            'student': student,
+            'section': section,
+            'valid_from': valid_from,
+            'valid_until': valid_until,
+            'pass_id': pass_id
+        })
 
         return super(CreatePassSerializer, self).update(instance, validated_data)
