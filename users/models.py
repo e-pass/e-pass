@@ -1,10 +1,17 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from users.managers import StudentManager, TrainerManager, UserModelManager
+
+
+def validate_no_special_characters(value: str) -> None:
+    special_characters = "~!@#$%^&*()_+{}[]|\\:;\"'<>,.?/"
+    if any(char in special_characters for char in value):
+        raise ValidationError(message='Недопустимые символы в поле')
 
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
@@ -13,8 +20,8 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
                                     unique=True, blank=False, null=False)
     password = models.CharField(max_length=128, blank=True, null=True)
     email = models.EmailField(blank=True, null=True, validators=[EmailValidator])
-    first_name = models.CharField(max_length=50, blank=False)
-    last_name = models.CharField(max_length=50, blank=False)
+    first_name = models.CharField(max_length=30, blank=False, validators=[validate_no_special_characters])
+    last_name = models.CharField(max_length=30, blank=False, validators=[validate_no_special_characters])
 
     is_trainer = models.BooleanField()
     is_phone_number_verified = models.BooleanField(default=False)
