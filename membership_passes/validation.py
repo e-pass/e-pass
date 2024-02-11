@@ -33,7 +33,7 @@ def get_pass_object_from_db(pass_id: int) -> Type['PassModel'] | None:
         return pass_obj
     except PassModel.DoesNotExist:
         raise serializers.ValidationError(
-            {'message' :f'Абонемента с id {pass_id} не существует. Проверьте параметры запроса'})
+            detail=f'Абонемента с id {pass_id} не существует. Проверьте параметры запроса')
 
 
 def check_expiration_period(valid_from: datetime, valid_until: datetime) -> bool:
@@ -51,7 +51,7 @@ def check_expiration_date(valid_until: datetime) -> bool:
 def check_expiration_total(valid_from: datetime, valid_until: datetime) -> None:
     """Функция полной проверки введённого периода действия и сравнения с текущей датой"""
     if not all((check_expiration_period(valid_from, valid_until), check_expiration_date(valid_until))):
-        raise serializers.ValidationError({'message': 'Введён некорректный период действия.'})
+        raise serializers.ValidationError(detail='Введён некорректный период действия.')
 
 
 def check_periods_crossing(exist_range: Type['Range'], new_range: Type['Range']) -> int | None:
@@ -88,7 +88,7 @@ def check_existing_passes(validated_data: dict) -> None:
         exist_range = Range(start=st_pass.valid_from, end=st_pass.valid_until)
         if check_periods_crossing(exist_range, new_range):
             raise serializers.ValidationError(
-                {'message': 'На эти даты уже имеется абонемент для данного пользователя.'})
+                detail='На эти даты уже имеется абонемент для данного пользователя.')
 
 
 def check_last_entry(last_entry_time: datetime) -> None:
@@ -98,30 +98,30 @@ def check_last_entry(last_entry_time: datetime) -> None:
     if last_entry_time + settings.CHECK_IN_FREQUENCY > now:
         timediff = (last_entry_time + settings.CHECK_IN_FREQUENCY - now)
         raise serializers.ValidationError(
-            {'message': f'Ошибка! Следующее сканирование не раньше, чем через {str(timediff).split(".")[0]}'})
+            detail=f'Ошибка! Следующее сканирование не раньше, чем через {str(timediff).split(".")[0]}')
 
 
 def check_unused_lessons_quantity(pass_obj: Type['PassModel'], quantity_entries: int) -> None:
     """Функция проверки количества неиспользованных занятий"""
     if pass_obj.quantity_lessons_max - quantity_entries <= 0:
-        raise serializers.ValidationError({'message': 'У абонемента закончилось кол-во занятий.'})
+        raise serializers.ValidationError(detail='У абонемента закончилось кол-во занятий.')
 
 
 def check_pass_activity(pass_obj: Type['PassModel']) -> None:
     """Функция проверки поля is_active у абонемента"""
     if not pass_obj.is_active:
-        raise serializers.ValidationError('Абонемент неактивен.')
+        raise serializers.ValidationError(detail='Абонемент неактивен.')
 
 
 def check_pass_is_paid(pass_obj: Type['PassModel']) -> None:
     if not pass_obj.is_paid:
-        raise serializers.ValidationError('Абонемент не оплачен.')
+        raise serializers.ValidationError(detail='Абонемент не оплачен.')
 
 
 def check_pass_valid_from(pass_obj: Type['PassModel']) -> None:
     if datetime.date.today() < pass_obj.valid_from:
         raise serializers.ValidationError(
-            f'Ошибка. Абонемент будет действителен для сканирования с {pass_obj.valid_from}')
+            detail=f'Ошибка. Абонемент будет действителен для сканирования с {pass_obj.valid_from}')
 
 
 def check_pass_before_check_in(pass_id: int) -> Type['PassModel']:
