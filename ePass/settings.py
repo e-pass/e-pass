@@ -78,7 +78,8 @@ INSTALLED_APPS = [
     # Local apps
     'users',
     'sections',
-    'user_verification'
+    'user_verification',
+    'membership_passes',
 ]
 
 MIDDLEWARE = [
@@ -110,7 +111,14 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    ]
+    ],
+    'DATE_INPUT_FORMATS': [
+        '%d.%m.%Y',  # '25.10.2021'
+        '%d.%m.%y',  # '25.10.21'
+        '%d-%m-%Y',  # '25-10-2021'
+        '%d-%m-%y',  # '25-10-21'
+        '%Y-%m-%d'   # '2021-10-25'
+    ],
 }
 
 DRF_STANDARDIZED_ERRORS = {
@@ -305,3 +313,6 @@ LOGGING = {
         },
     },
 }
+
+# Set check-in pause
+CHECK_IN_FREQUENCY = timedelta(hours=6)
