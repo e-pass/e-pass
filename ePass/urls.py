@@ -35,5 +35,6 @@ urlpatterns = [
     path('api/v1/', include('users.urls')),
     path('api/v1/', include('sections.urls')),
     path('api/v1/', include('user_verification.urls')),
+    path('api/v1/', include('membership_passes.urls')),
     path('docs/', schema_view.with_ui('swagger', cache_timeout=30), name='schema-swagger-ui'),
 ]
