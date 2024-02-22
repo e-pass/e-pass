@@ -24,14 +24,12 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
-    - name: Migrate database
-      run: |
-        python manage.py migrate
-
     - name: SSH Deploy
       uses: appleboy/ssh-action@master
       with:
         script: |
           sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd /opt/e-pass && 
-            sudo git pull origin master && 
+            git pull origin master && 
+            source ./venv/bin/activate && 
+            ./manage.py migrate &&
             sudo systemctl restart gunicorn'
