@@ -30,4 +30,4 @@ jobs:
           git pull origin master && 
           source ./venv/bin/activate && 
           ./manage.py migrate &&
-          sudo systemctl restart gunicorn'
+          sudo systemctl restart gunicorn
