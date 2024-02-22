@@ -28,6 +28,7 @@ jobs:
       uses: appleboy/ssh-action@master
       with:
         script: |
+          sudo apt-get install -y sshpass
           sshpass -p ${{ secrets.SERVER_PASSWORD }} ssh ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} 'cd /opt/e-pass && 
             git pull origin master && 
             source ./venv/bin/activate && 
