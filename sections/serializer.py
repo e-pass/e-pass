@@ -59,8 +59,11 @@ class ShortGroupSerializer(serializers.ModelSerializer):
 class SectionSerializer(serializers.ModelSerializer):
     owner_id = serializers.PrimaryKeyRelatedField(
         source='owner',
-        queryset=UserModel.objects.all(),
-        write_only=True
+        queryset=UserModel.trainers.all(),
+        write_only=True,
+        error_messages={
+            'does_not_exist': 'Пользователь с таким id не зарегистрирован,'
+                              ' или не является тренером'}
     )
     trainers_ids = serializers.PrimaryKeyRelatedField(
         source='trainers',
