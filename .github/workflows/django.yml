@@ -29,5 +29,6 @@ jobs:
           cd /opt/e-pass && 
           git pull origin master && 
           source ./venv/bin/activate && 
+          pip install -r requirements.txt
           ./manage.py migrate &&
-          sudo systemctl restart gunicorn
+          systemctl restart gunicorn
