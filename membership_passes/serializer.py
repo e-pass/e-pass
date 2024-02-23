@@ -1,15 +1,14 @@
 from typing import OrderedDict
-from django.conf import settings
 
+from django.conf import settings
 from django.contrib.auth.backends import UserModel
 from rest_framework import serializers, validators
 
-from membership_passes.models import PassModel, EntryModel
-from users.serializer import ShortUserSerializer
-
-from membership_passes.validation import (check_expiration_total,
-                                          check_existing_passes,
+from membership_passes.models import EntryModel, PassModel
+from membership_passes.validation import (check_existing_passes,
+                                          check_expiration_total,
                                           check_pass_before_check_in)
+from users.serializer import ShortUserSerializer
 
 
 class EntrySerializer(serializers.ModelSerializer):

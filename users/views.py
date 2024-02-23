@@ -1,11 +1,11 @@
+from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.viewsets import ModelViewSet
-from rest_framework import generics
 
 from users.managers import UserQuerySet
 from users.models import UserModel
 from users.permissions import IsOwnerOrStaff, IsTrainer
-from users.serializer import UserModelSerializer, ShortUserSerializer
+from users.serializer import ShortUserSerializer, UserModelSerializer
 
 
 class UserViewSet(ModelViewSet):

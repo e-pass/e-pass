@@ -2,9 +2,10 @@
 
 import django.core.validators
 import phonenumber_field.modelfields
+from django.db import migrations, models
+
 import users.managers
 import users.models
-from django.db import migrations, models
 
 
 class Migration(migrations.Migration):

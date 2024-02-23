@@ -1,7 +1,7 @@
 from django.urls import path
 
-from membership_passes.views import PassListCreateView, PassRetrieveUpdateDeleteView, EntryCreateView
-
+from membership_passes.views import (EntryCreateView, PassListCreateView,
+                                     PassRetrieveUpdateDeleteView)
 
 urlpatterns = [
     path('pass/<int:section_id>/pass/', PassListCreateView.as_view(), name='pass_list_add'),

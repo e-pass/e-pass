@@ -1,7 +1,7 @@
 from typing import Any, Type
-from django.db import models
 
 from django.contrib.auth.base_user import BaseUserManager
+from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 
