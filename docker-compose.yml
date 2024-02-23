@@ -5,7 +5,8 @@ services:
         build: .
         container_name: epass_app
         command: >
-            bash -c "python manage.py migrate &&
+            bash -c "mkdir logs && 
+                     python manage.py migrate &&
                      python manage.py runserver 0.0.0.0:8000"
         env_file:
             .env.docker
