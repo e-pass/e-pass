@@ -287,16 +287,16 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'request.log'),
-            'maxBytes': 1024 * 1024 * 1,  # 3 MB
-            'backupCount': 3,
+            'maxBytes': 1024 * 1024 * 1,  # 1 MB
+            'backupCount': 2,
             'formatter': 'simple',
         },
         'database_file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'logs', 'db.log'),
-            'maxBytes': 1024 * 1024 * 1,  # 3 MB
-            'backupCount': 3,
+            'maxBytes': 1024 * 1024 * 1,  # 1 MB
+            'backupCount': 2,
             'formatter': 'simple',
         },
     },
