@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator
+from django.core.validators import EmailValidator, URLValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -22,7 +22,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(blank=True, null=True, validators=[EmailValidator])
     first_name = models.CharField(max_length=30, blank=False, validators=[validate_no_special_characters])
     last_name = models.CharField(max_length=30, blank=False, validators=[validate_no_special_characters])
-
+    avatar = models.CharField(max_length=150, blank=True, null=True, validators=[URLValidator])
     is_trainer = models.BooleanField()
     is_phone_number_verified = models.BooleanField(default=False)
 
