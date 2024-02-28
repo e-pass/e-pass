@@ -5,9 +5,10 @@ services:
         build: .
         container_name: epass_app
         command: >
-            bash -c "mkdir logs && 
-                     python manage.py migrate &&
+            bash -c "python manage.py migrate &&
                      python manage.py runserver 0.0.0.0:8000"
+        volumes:
+            - ./:/opt/epass
         env_file:
             .env.docker
         ports:
@@ -24,8 +25,21 @@ services:
         depends_on:
             - web
             - redis
+
+    celery-beat:
+        build: .
+        command: >
+            celery -A ePass beat -l INFO
+        container_name: ePass_celery_beat_copy
+        env_file:
+            .env.docker
+        volumes:
+            - ./e-pass-copy:/e-pass-copy
+        depends_on:
+            - redis
+
     postgresdb:
-        image: postgres
+        image: postgres:14.6-alpine
         container_name: epass_pdb
         volumes:
             - postgres_data:/var/lib/postgresql/data/

@@ -12,7 +12,7 @@ class ShortUserSerializer(serializers.ModelSerializer):
 
 class UserModelSerializer(serializers.ModelSerializer):
     is_phone_number_verified = serializers.BooleanField(read_only=True, default=False)
-    avatar = serializers.URLField(max_length=150, required=False)
+    avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = UserModel
