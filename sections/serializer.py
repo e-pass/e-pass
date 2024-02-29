@@ -1,6 +1,8 @@
+from typing import Any
+
 from rest_framework import serializers
 
-from sections.models import GroupModel, SectionModel
+from sections.models import GroupModel, SectionModel, LessonModel
 from users.models import UserModel
 from users.serializer import UserModelSerializer
 
@@ -78,3 +80,25 @@ class SectionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SectionModel
         fields = '__all__'
+
+
+class LessonSerializer(serializers.ModelSerializer):
+    group_id = serializers.PrimaryKeyRelatedField(
+        queryset=GroupModel.objects.all(),
+        write_only=True,
+        required=True
+    )
+    lesson_datetime = serializers.DateTimeField()
+    duration = serializers.FloatField(default=50)
+    is_canceled = serializers.BooleanField(default=False)
+    type = serializers.CharField(read_only=True)
+    group = ShortGroupSerializer(read_only=True)
+
+    class Meta:
+        model = LessonModel
+        fields = '__all__'
+
+    def create(self, validated_data: Any) -> Any:
+        group_id = validated_data.pop('group_id')
+        validated_data['group'] = group_id
+        return super().create(validated_data)
