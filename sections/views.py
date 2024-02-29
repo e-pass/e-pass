@@ -7,9 +7,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from sections.models import GroupModel, SectionModel, LessonModel
-from sections.serializer import (GroupSerializer, SectionSerializer,
-                                 ShortGroupSerializer, ShortSectionSerializer, LessonSerializer)
+from sections.models import GroupModel, LessonModel, SectionModel
+from sections.serializer import (GroupSerializer, LessonSerializer,
+                                 SectionSerializer, ShortGroupSerializer,
+                                 ShortSectionSerializer)
 from users.permissions import IsSectionOwner, IsTrainer
 
 

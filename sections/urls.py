@@ -2,8 +2,9 @@ from django.urls import path
 from rest_framework import routers
 
 from sections.views import (GroupListCreateAPIView,
-                            GroupRetrieveUpdateDestroyAPIView, SectionViewSet, LessonRetrieveUpdateDestroyAPIView,
-                            LessonListCreateAPIView)
+                            GroupRetrieveUpdateDestroyAPIView,
+                            LessonListCreateAPIView,
+                            LessonRetrieveUpdateDestroyAPIView, SectionViewSet)
 
 router = routers.DefaultRouter()
 router.register(prefix='section', viewset=SectionViewSet, basename='section_api')

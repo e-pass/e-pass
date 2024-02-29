@@ -2,7 +2,7 @@ from typing import Any
 
 from rest_framework import serializers
 
-from sections.models import GroupModel, SectionModel, LessonModel
+from sections.models import GroupModel, LessonModel, SectionModel
 from users.models import UserModel
 from users.serializer import UserModelSerializer
 
