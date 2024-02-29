@@ -22,7 +22,7 @@ class UserModel(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(blank=True, null=True, validators=[EmailValidator])
     first_name = models.CharField(max_length=30, blank=False, validators=[validate_no_special_characters])
     last_name = models.CharField(max_length=30, blank=False, validators=[validate_no_special_characters])
-
+    avatar = models.ImageField(upload_to='user_avatars/', blank=True, null=True)
     is_trainer = models.BooleanField()
     is_phone_number_verified = models.BooleanField(default=False)
 

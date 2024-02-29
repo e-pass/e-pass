@@ -13,6 +13,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from celery.schedules import crontab
+
 import environ
 from dotenv import load_dotenv
 
@@ -73,6 +75,7 @@ INSTALLED_APPS = [
     'drf_yasg',
     'drf_standardized_errors',
     'django_celery_results',
+    'django_celery_beat',
     'django_filters',
 
     # Local apps
@@ -117,7 +120,7 @@ REST_FRAMEWORK = {
         '%d.%m.%y',  # '25.10.21'
         '%d-%m-%Y',  # '25-10-2021'
         '%d-%m-%y',  # '25-10-21'
-        '%Y-%m-%d'   # '2021-10-25'
+        '%Y-%m-%d'  # '2021-10-25'
     ],
 }
 
@@ -209,6 +212,7 @@ STATICFILES_FINDERS = (
 
 # Media
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'static/media/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -273,6 +277,21 @@ REDIS_PORT = env('REDIS_PORT')
 # Celery
 CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}'
 CELERY_BACKEND = f'redis://{REDIS_HOST}:{REDIS_PORT}'
+
+# Celery beat
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+CELERY_BEAT_SCHEDULE = {
+    'run-at-midnight': {
+        'task': 'membership_passes.tasks.check_passes',
+        'schedule': crontab(minute='0', hour='0')
+    }
+}
 
 LOGGING = {
     'version': 1,
