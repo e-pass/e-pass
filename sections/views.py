@@ -1,7 +1,7 @@
 from typing import Any
 
 from django.db.models import QuerySet
-from rest_framework import generics, status
+from rest_framework import generics
 from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 from rest_framework.response import Response

@@ -12,9 +12,9 @@ router.register(prefix='section', viewset=SectionViewSet, basename='section_api'
 urlpatterns = [
     path('section/<int:section_id>/group/', GroupListCreateAPIView.as_view(), name='group_list_create'),
     path(
-      'section/<int:section_id>/group/<int:group_id>/',
-      GroupRetrieveUpdateDestroyAPIView.as_view(),
-      name='group_RUD'
+        'section/<int:section_id>/group/<int:group_id>/',
+        GroupRetrieveUpdateDestroyAPIView.as_view(),
+        name='group_RUD'
     ),
     path('section/<int:section_id>/lesson/', LessonListCreateAPIView.as_view(), name='lesson_list_create'),
     path(
