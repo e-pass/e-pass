@@ -1,5 +1,14 @@
 # ePass #
 
+### Overview ###
+E-pass caters to a wide range of activities beyond the classroom, such as tutoring sessions, sports sections, and other extracurricular programs. The application offers a user-friendly interface for organizers to manage subscriptions and track attendance, while participants can effortlessly stay informed about their schedules and receive updates.
+
+### Tech Stack ###
+- Django;
+- Django Rest Framework;
+- Postgres DB;
+- Redis
+
 ### REQUIREMENTS ###
 
 * Python 3.10+ - https://www.python.org/downloads/
