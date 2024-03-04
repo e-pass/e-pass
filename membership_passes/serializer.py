@@ -55,7 +55,9 @@ class CreatePassSerializer(serializers.ModelSerializer):
             'does_not_exist': 'Введён некорректный id студента.'
         }
     )
-    quantity_lessons_max = serializers.IntegerField(default=0)
+    quantity_lessons_max = serializers.IntegerField(
+        min_value=1,
+        error_messages={'min_value': 'Убедитесь, что это значение больше либо равно 1.'})
     is_unlimited = serializers.BooleanField(default=False)
     valid_from = serializers.DateField(input_formats=settings.REST_FRAMEWORK.get('DATE_INPUT_FORMATS'))
     valid_until = serializers.DateField(input_formats=settings.REST_FRAMEWORK.get('DATE_INPUT_FORMATS'))
