@@ -48,8 +48,16 @@ def check_expiration_date(valid_until: datetime) -> bool:
     return True
 
 
+def check_max_expiration_date(valid_until: datetime) -> None:
+    """Функция проверки максимального аериода действия"""
+    if valid_until > datetime.date(2100, 1, 1):
+        raise serializers.ValidationError(
+            detail='Максимальный срок действия до 01 января 2100')
+
+
 def check_expiration_total(valid_from: datetime, valid_until: datetime) -> None:
     """Функция полной проверки введённого периода действия и сравнения с текущей датой"""
+    check_max_expiration_date(valid_until)
     if not all((check_expiration_period(valid_from, valid_until), check_expiration_date(valid_until))):
         raise serializers.ValidationError(detail='Введён некорректный период действия.')
 

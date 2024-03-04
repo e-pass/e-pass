@@ -12,7 +12,6 @@ class PassModel(models.Model):
     name = models.CharField(max_length=100)
     student = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, related_name='my_passes')
     section = models.ForeignKey(to=SectionModel, on_delete=models.CASCADE, related_name='section_passes')
-    qr_code = models.CharField(max_length=255, validators=[validators.URLValidator], unique=True)
     quantity_lessons_max = models.PositiveIntegerField(default=0)
     is_unlimited = models.BooleanField()
     is_active = models.BooleanField(default=True)

@@ -2,7 +2,7 @@ from typing import OrderedDict
 from django.conf import settings
 
 from django.contrib.auth.backends import UserModel
-from rest_framework import serializers, validators
+from rest_framework import serializers
 
 from membership_passes.models import PassModel, EntryModel
 from users.serializer import ShortUserSerializer
@@ -14,6 +14,7 @@ from membership_passes.validation import (check_expiration_total,
 
 class EntrySerializer(serializers.ModelSerializer):
     to_pass_id = serializers.IntegerField()
+
     class Meta:
         model = EntryModel
         fields = ('to_pass_id',)
@@ -24,8 +25,6 @@ class EntrySerializer(serializers.ModelSerializer):
         return attrs
 
 
-
-
 class PassSerializer(serializers.ModelSerializer):
     student = ShortUserSerializer(read_only=True)
     quantity_unused_lessons = serializers.IntegerField(read_only=True)
@@ -34,7 +33,7 @@ class PassSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PassModel
-        fields = ('id', 'name', 'student', 'section_id', 'qr_code', 'is_unlimited',
+        fields = ('id', 'name', 'student', 'section_id', 'is_unlimited',
                   'quantity_lessons_max', 'quantity_unused_lessons', 'entries',
                   'is_active', 'valid_from', 'valid_until', 'price', 'is_paid')
 
@@ -57,9 +56,6 @@ class CreatePassSerializer(serializers.ModelSerializer):
             'does_not_exist': 'Введён некорректный id студента.'
         }
     )
-    qr_code = serializers.URLField(validators=[validators.UniqueValidator(
-        queryset=PassModel.objects.all().only('qr_code'),
-        message="Ссылка на qr-код должна быть уникальной")])
     quantity_lessons_max = serializers.IntegerField(default=0)
     is_unlimited = serializers.BooleanField(default=False)
     valid_from = serializers.DateField(input_formats=settings.REST_FRAMEWORK.get('DATE_INPUT_FORMATS'))
@@ -69,17 +65,14 @@ class CreatePassSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PassModel
-        fields = ('name', 'student_id', 'is_unlimited', 'qr_code',
-                  'quantity_lessons_max',
+        fields = ('name', 'student_id', 'is_unlimited', 'quantity_lessons_max',
                   'valid_from', 'valid_until', 'price', 'is_paid')
 
     def validate(self, attrs):
-        print(f'attrs: {attrs}')
         if self.context.get("request").method == 'POST':
             check_expiration_total(valid_from=attrs['valid_from'], valid_until=attrs['valid_until'])
             if attrs['quantity_lessons_max'] == 0 and attrs['is_unlimited'] is False:
-                raise serializers.ValidationError("Установите максимальное количество уроков,"
-                                                  " или активируйте поле 'Безлимитный'")
+                raise serializers.ValidationError("Установите максимальное количество уроков")
         return attrs
 
     def create(self, validated_data):

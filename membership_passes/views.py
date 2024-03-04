@@ -4,6 +4,7 @@ from django.db.models import Prefetch, Count, F, QuerySet
 from rest_framework import status
 from rest_framework import generics
 from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.request import Request
 
@@ -18,13 +19,13 @@ from users.permissions import IsPassStudentOrTrainerOrSectionOwner, IsTrainerOrS
 
 
 class EntryCreateView(generics.CreateAPIView):
-    permission_classes = (IsTrainer,)
+    permission_classes = (IsAuthenticated, IsTrainer)
     queryset = EntryModel.objects.all()
     serializer_class = EntrySerializer
 
 
 class PassListCreateView(generics.ListCreateAPIView):
-    permission_classes = (IsTrainer,)
+    permission_classes = (IsAuthenticated, IsTrainer)
 
     def get_queryset(self) -> QuerySet:
         method = self.request.method
@@ -80,9 +81,9 @@ class PassRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_permissions(self) -> list:
         if self.request.method == 'GET':
-            self.permission_classes = (IsPassStudentOrTrainerOrSectionOwner,)
+            self.permission_classes = (IsAuthenticated, IsPassStudentOrTrainerOrSectionOwner,)
         else:
-            self.permission_classes = (IsTrainerOrSectionOwner,)
+            self.permission_classes = (IsAuthenticated, IsTrainerOrSectionOwner,)
         return super(PassRetrieveUpdateDeleteView, self).get_permissions()
 
     def update(self, request: Request, *args: Any, **kwargs: Any) -> Response | JsonResponse:
