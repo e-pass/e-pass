@@ -1,6 +1,6 @@
 import datetime
-from typing import Any, Type
 from collections import namedtuple
+from typing import Any, Type
 
 from django.conf import settings
 from django.http import Http404

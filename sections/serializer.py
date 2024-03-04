@@ -4,20 +4,18 @@ from sections.models import GroupModel, SectionModel
 from users.models import UserModel
 from users.serializer import UserModelSerializer
 
-from typing import Any
-
 
 class ShortSectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SectionModel
-        fields = ('id', 'name', 'created_at', 'updated_at',)
+        fields = ('id', 'title', 'created_at', 'updated_at',)
 
 
 class GroupSerializer(serializers.ModelSerializer):
     trainers_ids = serializers.PrimaryKeyRelatedField(
         source='trainers',
-        queryset=UserModel.trainers.filter(),
+        queryset=UserModel.trainers.all(),
         write_only=True,
         required=False,
         many=True
@@ -33,18 +31,19 @@ class GroupSerializer(serializers.ModelSerializer):
     trainers = UserModelSerializer(many=True, read_only=True)
     students = UserModelSerializer(many=True, read_only=True)
 
-    def validate_trainers_ids(self, value: Any) -> Any:
-        section_trainers = self.instance.section.trainers.all()
-        invalid_trainers = set(value) - set(section_trainers)
+    def validate_trainers_ids(self, values: list[int]) -> list[int]:
+        section_id = self.context['view'].kwargs.get('section_id')
+        section = SectionModel.objects.get(id=section_id)
+        trainers = section.trainers.all()
+        for train in values:
+            if train not in trainers:
+                raise serializers.ValidationError('Тренер не состоит в секции')
 
-        if invalid_trainers:
-            raise serializers.ValidationError('Выбранные тренера не состоят в секции')
-
-        return value
+        return values
 
     class Meta:
         model = GroupModel
-        fields = ('id', 'name', 'trainers', 'trainers_ids',
+        fields = ('id', 'title', 'trainers', 'trainers_ids',
                   'students', 'students_ids',
                   'created_at', 'updated_at')
 
@@ -53,14 +52,16 @@ class ShortGroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = GroupModel
-        fields = ('id', 'name', 'created_at', 'updated_at',)
+        fields = ('id', 'title', 'created_at', 'updated_at',)
 
 
 class SectionSerializer(serializers.ModelSerializer):
     owner_id = serializers.PrimaryKeyRelatedField(
         source='owner',
-        queryset=UserModel.objects.all(),
-        write_only=True
+        queryset=UserModel.trainers.all(),
+        write_only=True,
+        error_messages={
+            'does_not_exist': 'Пользователь не зарегистрирован или не является тренером'}
     )
     trainers_ids = serializers.PrimaryKeyRelatedField(
         source='trainers',

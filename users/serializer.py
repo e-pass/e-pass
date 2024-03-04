@@ -12,12 +12,13 @@ class ShortUserSerializer(serializers.ModelSerializer):
 
 class UserModelSerializer(serializers.ModelSerializer):
     is_phone_number_verified = serializers.BooleanField(read_only=True, default=False)
+    avatar = serializers.ImageField(required=False)
 
     class Meta:
         model = UserModel
         fields = ('id', 'phone_number', 'first_name', 'last_name', 'is_trainer',
                   'is_phone_number_verified', 'student_parent_phone', 'student_parent_name',
-                  'created_at', 'updated_at')
+                  'created_at', 'updated_at', 'avatar')
 
     def to_representation(self, instance: UserModel) -> dict:
         """Скрывает некоторые поля модели, в зависимости от типа пользователя"""

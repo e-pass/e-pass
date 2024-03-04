@@ -1,21 +1,21 @@
 from typing import Any
 
-from django.db.models import Prefetch, Count, F, QuerySet
-from rest_framework import status
-from rest_framework import generics
+from django.db.models import Count, F, Prefetch, QuerySet
 from django.http import JsonResponse
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
+from rest_framework import generics, status
 from rest_framework.request import Request
-
+from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
+from rest_framework.permissions import IsAuthenticated
 
-from membership_passes.models import PassModel, EntryModel
-from membership_passes.serializer import PassSerializer, CreatePassSerializer, EntrySerializer
-from membership_passes.validation import get_section_object_from_db, check_expiration_date
+from membership_passes.models import EntryModel, PassModel
+from membership_passes.serializer import (CreatePassSerializer,
+                                          EntrySerializer, PassSerializer)
+from membership_passes.validation import (check_expiration_date,
+                                          get_section_object_from_db)
 from users.models import UserModel
-from users.permissions import IsPassStudentOrTrainerOrSectionOwner, IsTrainerOrSectionOwner, IsTrainer
-
+from users.permissions import (IsPassStudentOrTrainerOrSectionOwner, IsTrainer,
+                               IsTrainerOrSectionOwner)
 
 
 class EntryCreateView(generics.CreateAPIView):

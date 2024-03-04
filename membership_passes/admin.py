@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db.models import Count
 
-from membership_passes.models import PassModel, EntryModel
+from membership_passes.models import EntryModel, PassModel
 
 
 @admin.register(PassModel)
