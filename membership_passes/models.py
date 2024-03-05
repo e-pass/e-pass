@@ -1,6 +1,6 @@
 from django.contrib.auth.backends import UserModel
-from django.core import validators
 from django.db import models
+from django.core import validators
 
 from membership_passes.validation import check_expiration_date
 from sections.models import SectionModel
@@ -11,9 +11,8 @@ class PassModel(models.Model):
     name = models.CharField(max_length=100)
     student = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, related_name='my_passes')
     section = models.ForeignKey(to=SectionModel, on_delete=models.CASCADE, related_name='section_passes')
-    qr_code = models.CharField(max_length=255, validators=[validators.URLValidator], unique=True)
-    quantity_lessons_max = models.PositiveIntegerField(default=0)
-    is_unlimited = models.BooleanField()
+    quantity_lessons_max = models.PositiveIntegerField(validators=[validators.MinValueValidator(1)])
+    is_unlimited = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     valid_from = models.DateField()
     valid_until = models.DateField()

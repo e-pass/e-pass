@@ -6,6 +6,7 @@ from rest_framework import generics, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
+from rest_framework.permissions import IsAuthenticated
 
 from membership_passes.models import EntryModel, PassModel
 from membership_passes.serializer import (CreatePassSerializer,
@@ -18,13 +19,13 @@ from users.permissions import (IsPassStudentOrTrainerOrSectionOwner, IsTrainer,
 
 
 class EntryCreateView(generics.CreateAPIView):
-    permission_classes = (IsTrainer,)
+    permission_classes = (IsAuthenticated, IsTrainer)
     queryset = EntryModel.objects.all()
     serializer_class = EntrySerializer
 
 
 class PassListCreateView(generics.ListCreateAPIView):
-    permission_classes = (IsTrainer,)
+    permission_classes = (IsAuthenticated, IsTrainer)
 
     def get_queryset(self) -> QuerySet:
         method = self.request.method
@@ -80,9 +81,9 @@ class PassRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_permissions(self) -> list:
         if self.request.method == 'GET':
-            self.permission_classes = (IsPassStudentOrTrainerOrSectionOwner,)
+            self.permission_classes = (IsAuthenticated, IsPassStudentOrTrainerOrSectionOwner,)
         else:
-            self.permission_classes = (IsTrainerOrSectionOwner,)
+            self.permission_classes = (IsAuthenticated, IsTrainerOrSectionOwner,)
         return super(PassRetrieveUpdateDeleteView, self).get_permissions()
 
     def update(self, request: Request, *args: Any, **kwargs: Any) -> Response | JsonResponse:

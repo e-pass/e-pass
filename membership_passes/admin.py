@@ -11,10 +11,10 @@ class PassModelAdmin(admin.ModelAdmin):
     readonly_fields = ('quantity_unused_lessons',)
     fieldsets = (
         ('Main info', {
-            'fields': ('name', 'student', 'section', 'qr_code')
+            'fields': ('name', 'student', 'section')
         }),
         ('Lessons data', {
-            'fields': ('is_unlimited', 'quantity_lessons_max', 'quantity_unused_lessons'),
+            'fields': ('quantity_lessons_max', 'quantity_unused_lessons'),
         }),
         ('Validity', {
             'fields': ('is_active', 'valid_from', 'valid_until')
