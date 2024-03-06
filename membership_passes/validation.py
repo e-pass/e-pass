@@ -28,7 +28,6 @@ def get_pass_object_from_db(pass_id: int) -> Type['PassModel'] | None:
     """Функция проверки наличия записи в БД."""
     from membership_passes.models import PassModel
     try:
-        print('im in get_pass_object_from_bd')
         pass_obj = PassModel.objects.get(id=pass_id)
         return pass_obj
     except PassModel.DoesNotExist:
@@ -143,8 +142,7 @@ def check_pass_before_check_in(pass_id: int) -> Type['PassModel']:
     check_pass_is_paid(pass_obj=pass_obj)
     check_pass_valid_from(pass_obj=pass_obj)
     if quantity_entries > 0:
-        if not pass_obj.is_unlimited:
-            check_unused_lessons_quantity(pass_obj=pass_obj, quantity_entries=quantity_entries)
+        check_unused_lessons_quantity(pass_obj=pass_obj, quantity_entries=quantity_entries)
         check_last_entry(last_entry_time=entries.last().created_at)
 
     return pass_obj

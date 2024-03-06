@@ -12,7 +12,6 @@ class PassModel(models.Model):
     student = models.ForeignKey(to=UserModel, on_delete=models.CASCADE, related_name='my_passes')
     section = models.ForeignKey(to=SectionModel, on_delete=models.CASCADE, related_name='section_passes')
     quantity_lessons_max = models.PositiveIntegerField(validators=[validators.MinValueValidator(1)])
-    is_unlimited = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     valid_from = models.DateField()
     valid_until = models.DateField()
