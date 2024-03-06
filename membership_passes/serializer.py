@@ -32,18 +32,9 @@ class PassSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PassModel
-        fields = ('id', 'name', 'student', 'section_id', 'is_unlimited',
+        fields = ('id', 'name', 'student', 'section_id',
                   'quantity_lessons_max', 'quantity_unused_lessons', 'entries',
                   'is_active', 'valid_from', 'valid_until', 'price', 'is_paid')
-
-    def to_representation(self, instance: PassModel) -> OrderedDict:
-        ret = super(PassSerializer, self).to_representation(instance)
-        if instance.is_unlimited:
-            ret.pop("quantity_lessons_max")
-            ret.pop("quantity_unused_lessons")
-        else:
-            ret.pop("is_unlimited")
-        return ret
 
 
 class CreatePassSerializer(serializers.ModelSerializer):
@@ -58,22 +49,19 @@ class CreatePassSerializer(serializers.ModelSerializer):
     quantity_lessons_max = serializers.IntegerField(
         min_value=1,
         error_messages={'min_value': 'Убедитесь, что это значение больше либо равно 1.'})
-    is_unlimited = serializers.BooleanField(default=False)
     valid_from = serializers.DateField(input_formats=settings.REST_FRAMEWORK.get('DATE_INPUT_FORMATS'))
     valid_until = serializers.DateField(input_formats=settings.REST_FRAMEWORK.get('DATE_INPUT_FORMATS'))
     price = serializers.DecimalField(max_digits=8, decimal_places=2)
-    is_paid = serializers.BooleanField()
+    is_paid = serializers.BooleanField(default=False)
 
     class Meta:
         model = PassModel
-        fields = ('name', 'student_id', 'is_unlimited', 'quantity_lessons_max',
+        fields = ('name', 'student_id', 'quantity_lessons_max',
                   'valid_from', 'valid_until', 'price', 'is_paid')
 
     def validate(self, attrs):
         if self.context.get("request").method == 'POST':
             check_expiration_total(valid_from=attrs['valid_from'], valid_until=attrs['valid_until'])
-            if attrs['quantity_lessons_max'] == 0 and attrs['is_unlimited'] is False:
-                raise serializers.ValidationError("Установите максимальное количество уроков")
         return attrs
 
     def create(self, validated_data):
