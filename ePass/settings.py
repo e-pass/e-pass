@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     'django_celery_results',
     'django_celery_beat',
     'django_filters',
+    'corsheaders',
 
     # Local apps
     'users',
@@ -86,6 +87,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -335,3 +338,6 @@ LOGGING = {
 
 # Set check-in pause
 CHECK_IN_FREQUENCY = timedelta(hours=6)
+
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True
