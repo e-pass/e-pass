@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.timezone import now
 
+from sections.utils.enums import LessonTypeEnum
 from users.models import UserModel
 
 
@@ -28,13 +29,24 @@ class GroupModel(models.Model):
 
 
 class LessonModel(models.Model):
-    INDIVIDUAL = 'individual'
-    GROUP = 'group'
-
     group = models.ForeignKey(to=GroupModel, on_delete=models.CASCADE)
     lesson_datetime = models.DateTimeField()
-    duration = models.FloatField()
-    is_canceled = models.BooleanField()
+    duration = models.FloatField(default=50)
+    is_canceled = models.BooleanField(default=False)
     type = models.CharField(max_length=15, null=True)
     created_at = models.DateTimeField(default=now)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def save(
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None
+    ) -> None:
+        students_count = self.group.students.count()
+        if students_count == 1:
+            self.type = LessonTypeEnum.INDIVIDUAL.value
+        else:
+            self.type = LessonTypeEnum.GROUP.value
+        return super().save()
