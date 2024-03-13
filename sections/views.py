@@ -7,9 +7,10 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from sections.models import GroupModel, SectionModel
-from sections.serializer import (GroupSerializer, SectionSerializer,
-                                 ShortGroupSerializer, ShortSectionSerializer)
+from sections.models import GroupModel, LessonModel, SectionModel
+from sections.serializer import (GroupSerializer, LessonSerializer,
+                                 SectionSerializer, ShortGroupSerializer,
+                                 ShortSectionSerializer)
 from users.permissions import IsSectionOwner, IsTrainer
 
 
@@ -61,3 +62,17 @@ class GroupRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         section_id = self.kwargs.get(self.section_lookup_url_kwarg)
         group_id = self.kwargs.get(self.lookup_url_kwarg)
         return get_object_or_404(GroupModel, section_id=section_id, id=group_id)
+
+
+class LessonListCreateAPIView(generics.ListCreateAPIView):
+    serializer_class = LessonSerializer
+    lookup_url_kwarg = 'section_id'
+
+    def get_queryset(self) -> QuerySet:
+        section_id = self.kwargs.get(self.lookup_url_kwarg)
+        return LessonModel.objects.filter(group__section_id=section_id)
+
+
+class LessonRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = LessonSerializer
+    queryset = LessonModel.objects.all()
