@@ -1,7 +1,6 @@
 from typing import Any
 
-from rest_framework import generics, status
-from rest_framework.exceptions import ErrorDetail
+from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAdminUser
 from rest_framework.request import Request
 from rest_framework.response import Response
