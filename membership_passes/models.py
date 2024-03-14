@@ -1,6 +1,6 @@
 from django.contrib.auth.backends import UserModel
-from django.db import models
 from django.core import validators
+from django.db import models
 
 from membership_passes.validation import check_expiration_date
 from sections.models import SectionModel
