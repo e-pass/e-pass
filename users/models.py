@@ -16,8 +16,13 @@ def validate_no_special_characters(value: str) -> None:
 
 class UserModel(AbstractBaseUser, PermissionsMixin):
     """User model"""
-    phone_number = PhoneNumberField(region=settings.PHONE_NUMBER_REGION,
-                                    unique=True, blank=False, null=False)
+    phone_number = PhoneNumberField(
+        region=settings.PHONE_NUMBER_REGION,
+        unique=True,
+        blank=False,
+        null=False,
+        db_index=True
+    )
     password = models.CharField(max_length=128, blank=True, null=True)
     email = models.EmailField(blank=True, null=True, validators=[EmailValidator])
     first_name = models.CharField(max_length=30, blank=False, validators=[validate_no_special_characters])

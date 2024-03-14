@@ -1,7 +1,13 @@
-from rest_framework import generics
+from typing import Any
+
+from rest_framework import generics, status
+from rest_framework.exceptions import ErrorDetail
 from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.request import Request
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from sections.utils.exception_handlers import UniqueUserHandler
 from users.managers import UserQuerySet
 from users.models import UserModel
 from users.permissions import IsOwnerOrStaff, IsTrainer
@@ -24,6 +30,12 @@ class UserViewSet(ModelViewSet):
             self.permission_classes = (IsAdminUser,)
 
         return super(UserViewSet, self).get_permissions()
+
+    def create(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        phone_number = request.data.get('phone_number')
+        if UserModel.objects.filter(phone_number=phone_number).exists():
+            raise UniqueUserHandler()
+        return super().create(request, *args, **kwargs)
 
 
 class UserSearchView(generics.ListAPIView):
