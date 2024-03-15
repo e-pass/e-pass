@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 from user_verification.models import ConfirmationCodeModel
 from user_verification.serializer import (ConfirmationCodeSerializer,
                                           VerifyCodeSerializer)
-from ePass.schema_data import API_METADATA
+from resources.schemas.schema_data import API_METADATA
 from users.serializer import UserModelSerializer
 
 
