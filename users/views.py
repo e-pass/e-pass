@@ -6,7 +6,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from sections.utils.exception_handlers import UniqueUserHandler
+from ePass.utils.exception_handlers import UniqueUserHandler
 from users.managers import UserQuerySet
 from users.models import UserModel
 from users.permissions import IsOwnerOrStaff, IsTrainer
