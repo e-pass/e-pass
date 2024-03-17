@@ -124,6 +124,9 @@ REST_FRAMEWORK = {
         '%d-%m-%y',  # '25-10-21'
         '%Y-%m-%d'  # '2021-10-25'
     ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '3/minute',
+    }
 }
 
 DRF_STANDARDIZED_ERRORS = {
