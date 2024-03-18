@@ -5,7 +5,7 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.throttling import AnonRateThrottle
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import AuthUser
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -21,7 +21,7 @@ from users.serializer import UserModelSerializer
 class SendConfirmationCodeView(APIView):
     permission_classes = (AllowAny,)
     serializer_class = ConfirmationCodeSerializer
-    throttle_classes = (AnonRateThrottle,)
+    throttle_classes = (AnonRateThrottle, UserRateThrottle,)
 
     @swagger_auto_schema(**API_METADATA["SendConfirmationCodeView_post"])
     def post(self, request: Request, *args: Any, **kwargs: dict) -> Response:
