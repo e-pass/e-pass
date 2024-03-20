@@ -6,7 +6,7 @@ from phonenumber_field.serializerfields import PhoneNumberField
 from rest_framework import serializers
 
 from user_verification.models import ConfirmationCodeModel
-from user_verification.services.sms_service import send_sms_with_code
+# from user_verification.services.sms_service import send_sms_with_code
 from users.models import UserModel
 
 

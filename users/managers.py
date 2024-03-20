@@ -2,11 +2,12 @@ from typing import Any, Type
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
+from django.db.models import QuerySet
 from phonenumber_field.modelfields import PhoneNumberField
 
 
 class UserQuerySet(models.query.QuerySet):
-    def search(self, query: str) -> Type['UserQuerySet']:
+    def search(self, query: str) -> QuerySet:
         lookups = (
             models.Q(phone_number__contains=query) |
             models.Q(first_name__icontains=query) |

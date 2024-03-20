@@ -1,13 +1,12 @@
 import datetime
 from collections import namedtuple
-from typing import Any, Type, Optional
+from typing import Any, Optional, Type
 
 from django.conf import settings
 from django.http import Http404
 from django.utils import timezone
 from rest_framework import serializers
 
-from membership_passes.models import PassModel
 from sections.models import SectionModel
 
 
@@ -28,12 +27,14 @@ def get_section_object_from_db(section_id: int, need_return=False) -> Type['Sect
 def get_pass_object_from_db(pass_id: int) -> Optional['PassModel']:
     """Функция проверки наличия записи в БД."""
     from membership_passes.models import PassModel
+
     try:
         pass_obj = PassModel.objects.get(id=pass_id)
         return pass_obj
     except PassModel.DoesNotExist:
         raise serializers.ValidationError(
-            detail=f'Абонемента с id {pass_id} не существует. Проверьте параметры запроса')
+            detail=f'Абонемента с id {pass_id} не существует. Проверьте параметры запроса'
+        )
 
 
 def check_expiration_period(valid_from: datetime, valid_until: datetime) -> bool:
