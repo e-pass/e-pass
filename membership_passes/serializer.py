@@ -1,5 +1,3 @@
-from typing import OrderedDict
-
 from django.conf import settings
 from django.contrib.auth.backends import UserModel
 from rest_framework import serializers

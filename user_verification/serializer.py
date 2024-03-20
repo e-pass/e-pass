@@ -18,7 +18,7 @@ class ConfirmationCodeSerializer(serializers.Serializer):
         code = self.__generate_confirmation_code()
         user = get_user_model().objects.get(phone_number=phone_number)
         ConfirmationCodeModel.objects.create(user=user, code=f'{code}')
-        sms_result = send_sms_with_code(phone_number=phone_number, code=code)
+        # sms_result = send_sms_with_code(phone_number=phone_number, code=code)
         return code
 
     @staticmethod

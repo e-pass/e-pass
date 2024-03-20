@@ -33,10 +33,14 @@ class PassListCreateView(generics.ListCreateAPIView):
             return PassModel.objects.annotate(
                 quantity_unused_lessons=F('quantity_lessons_max') - Count('entries')).filter(
                 section=self.kwargs['section_id']).prefetch_related(
-                Prefetch('entries', queryset=EntryModel.objects.all()),
-                Prefetch('student', queryset=UserModel.students.all().only(
-                    'id', 'first_name', 'last_name', 'phone_number')
-                         )
+                Prefetch(
+                    'entries',
+                    queryset=EntryModel.objects.all()
+                ),
+                Prefetch(
+                    'student',
+                    queryset=UserModel.students.all().only('id', 'first_name', 'last_name', 'phone_number')
+                )
             )
         return PassModel.objects.filter(section=self.kwargs['section_id'])
 
@@ -64,14 +68,17 @@ class PassRetrieveUpdateDeleteView(generics.RetrieveUpdateDestroyAPIView):
                 quantity_unused_lessons=F('quantity_lessons_max') - Count('entries')
             ).prefetch_related(
                 'entries',
-                Prefetch('student', queryset=UserModel.students.all().only(
-                    'id', 'first_name', 'last_name', 'phone_number')
-                         )
+                Prefetch(
+                    'student',
+                    queryset=UserModel.students.all().only('id', 'first_name', 'last_name', 'phone_number')
+                )
             )
+
         return PassModel.objects.all().prefetch_related(
-            Prefetch('student', queryset=UserModel.students.all().only(
-                'id', 'first_name', 'last_name', 'phone_number')
-                     )
+            Prefetch(
+                'student',
+                queryset=UserModel.students.all().only('id', 'first_name', 'last_name', 'phone_number')
+            )
         )
 
     def get_serializer_class(self) -> Any:
