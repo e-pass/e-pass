@@ -21,7 +21,7 @@ def get_section_object_from_db(section_id: int, need_return=False) -> Type['Sect
         section = SectionModel.objects.get(id=section_id)
         return section if need_return else None
     except SectionModel.DoesNotExist:
-        raise Http404(f'Секции с id {section_id} не существует. Проверьте параметры запроса')
+        raise Http404(f"Секции с id {section_id} не существует. Проверьте параметры запроса")
 
 
 def get_pass_object_from_db(pass_id: int) -> Type['PassModel'] | None:
