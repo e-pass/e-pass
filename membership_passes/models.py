@@ -1,3 +1,5 @@
+from typing import Any
+
 from django.contrib.auth.backends import UserModel
 from django.core import validators
 from django.db import models
@@ -20,14 +22,15 @@ class PassModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, editable=False)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.name}. {self.student.first_name} {self.student.last_name}. Valid until{self.valid_until}'
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: Any, **kwargs: Any) -> None:
         """При создании нового абонемента устанавливается количество
         неиспользованных уроков равное максимальному.
         При каждом сохранении в базу данных проверяется срок действия,
         при необходимости поле is_active меняется на False"""
+
         creating = not self.pk
         if creating:
             self.quantity_unused_lessons = self.quantity_lessons_max
@@ -39,8 +42,9 @@ class PassModel(models.Model):
 
 class EntryModel(models.Model):
     """Модель Отметка посещения"""
+
     to_pass = models.ForeignKey(to=PassModel, on_delete=models.CASCADE, related_name='entries')
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str(self.created_at)

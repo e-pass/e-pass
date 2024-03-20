@@ -1,6 +1,6 @@
 import datetime
 from collections import namedtuple
-from typing import Any, Type
+from typing import Any, Optional, Type
 
 from django.conf import settings
 from django.http import Http404
@@ -24,15 +24,17 @@ def get_section_object_from_db(section_id: int, need_return=False) -> Type['Sect
         raise Http404(f'Секции с id {section_id} не существует. Проверьте параметры запроса')
 
 
-def get_pass_object_from_db(pass_id: int) -> Type['PassModel'] | None:
+def get_pass_object_from_db(pass_id: int) -> Optional['PassModel']:
     """Функция проверки наличия записи в БД."""
     from membership_passes.models import PassModel
+
     try:
         pass_obj = PassModel.objects.get(id=pass_id)
         return pass_obj
     except PassModel.DoesNotExist:
         raise serializers.ValidationError(
-            detail=f'Абонемента с id {pass_id} не существует. Проверьте параметры запроса')
+            detail=f'Абонемента с id {pass_id} не существует. Проверьте параметры запроса'
+        )
 
 
 def check_expiration_period(valid_from: datetime, valid_until: datetime) -> bool:
@@ -61,7 +63,7 @@ def check_expiration_total(valid_from: datetime, valid_until: datetime) -> None:
         raise serializers.ValidationError(detail='Введён некорректный период действия.')
 
 
-def check_periods_crossing(exist_range: Type['Range'], new_range: Type['Range']) -> int | None:
+def check_periods_crossing(exist_range: namedtuple, new_range: namedtuple) -> Optional[int]:
     """Функция подсчёта количества общих дней в двух временных периодах"""
     latest_start = max(exist_range.start, new_range.start)
     earliest_end = min(exist_range.end, new_range.end)

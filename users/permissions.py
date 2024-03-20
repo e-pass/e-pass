@@ -4,8 +4,6 @@ from django.views import View
 from rest_framework import permissions
 from rest_framework.request import Request
 
-from users.models import UserModel
-
 
 class IsOwnerOrStaff(permissions.BasePermission):
     """Права на аккаунт для владельца аккаунта или администратора"""
@@ -34,23 +32,17 @@ class IsGroupTrainerOrAccountOwnerOrStaff(permissions.BasePermission):
         ))
 
 
-# class IsTrainer(permissions.BasePermission):
-#     """Проверка, является ли пользователь тренером"""
-#
-#     def has_permission(self, request: Request, view: View) -> bool:
-#         phone_number = request.user.phone_number
-#         return UserModel.trainers.filter(phone_number=phone_number).exists()
-
-
 class IsTrainer(permissions.BasePermission):
     """Простая проверка, является ли пользователь тренером"""
+
     def has_permission(self, request: Request, view: View) -> bool:
         return request.user.is_trainer
+
 
 class IsPassStudentOrTrainerOrSectionOwner(permissions.BasePermission):
     """Права на абонемент для студента, тренера или владельца секции"""
 
-    def has_object_permission(self, request: Request, view: View, obj: Any)-> bool:
+    def has_object_permission(self, request: Request, view: View, obj: Any) -> bool:
         return any((request.user == obj.student, request.user in obj.section.trainers.all(),
                     request.user == obj.section.owner))
 

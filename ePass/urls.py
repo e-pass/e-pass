@@ -29,7 +29,7 @@ schema_view = get_schema_view(
         description='API Doc',
     ),
     public=True,
-    permission_classes=[permissions.AllowAny,],
+    permission_classes=[permissions.AllowAny]
 )
 
 urlpatterns = [
