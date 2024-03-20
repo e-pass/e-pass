@@ -19,9 +19,9 @@ jobs:
         username: ${{ secrets.SERVER_USERNAME }}
         password: ${{ secrets.SERVER_PASSWORD }}
         script: |
-          cd /opt/e-pass && 
-          git pull origin master && 
-          source ./venv/bin/activate && 
+          cd /opt/e-pass &&
+          git pull origin master &&
+          source ./venv/bin/activate &&
           pip install -r requirements.txt
           ./manage.py migrate &&
           systemctl restart gunicorn
