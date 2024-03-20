@@ -14,14 +14,7 @@ repos:
     rev: 4.0.1
     hooks:
       - id: flake8
-        exclude: venv, External Libraries, .git, __pycache__, env, jenkins, *.html, *.xml
+        exclude: venv, External Libraries, .git, __pycache__, env, jenkins, *.html, *.xml, migrations
         additional_dependencies:
           - flake8-annotations
           - flake8-quotes
-
-      - id: autoflake
-        name: autoflake
-        entry: autoflake
-        language: system
-        types: [python]
-        args: [--in-place, --remove-all-unused-imports, --remove-duplicate-keys]
