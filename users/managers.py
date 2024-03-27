@@ -48,6 +48,7 @@ class UserModelManager(BaseUserManager):
     def create_superuser(self, phone_number: str, password: Any, **extra_fields: Any) -> Type['UserModel']:
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_trainer', True)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
