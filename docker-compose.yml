@@ -27,7 +27,6 @@ services:
         depends_on:
             - web
             - redis
-
     celery-beat:
         build: .
         command: >
@@ -39,7 +38,6 @@ services:
             - ./e-pass-copy:/e-pass-copy
         depends_on:
             - redis
-
     postgresdb:
         image: postgres
         container_name: epass_pdb
@@ -47,9 +45,10 @@ services:
             - postgres_data:/var/lib/postgresql/data/
         env_file:
             .env.docker
+        ports:
+            - "5432:5432"
     redis:
         image: redis
         container_name: epass_redis
-
 volumes:
     postgres_data: null
