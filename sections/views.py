@@ -64,15 +64,12 @@ class GroupRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
         return get_object_or_404(GroupModel, section_id=section_id, id=group_id)
 
 
-class LessonListCreateAPIView(generics.ListCreateAPIView):
-    serializer_class = LessonSerializer
-    lookup_url_kwarg = 'section_id'
-
-    def get_queryset(self) -> QuerySet:
-        section_id = self.kwargs.get(self.lookup_url_kwarg)
-        return LessonModel.objects.filter(group__section_id=section_id)
-
-
-class LessonRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
+class LessonViewSet(ModelViewSet):
     serializer_class = LessonSerializer
     queryset = LessonModel.objects.all()
+
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        section_id = request.query_params.get('section_id')
+        if section_id:
+            self.queryset = LessonModel.objects.filter(group__section__id=section_id)
+        return super().list(request, *args, **kwargs)
