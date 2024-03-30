@@ -69,6 +69,7 @@ class GroupRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 class LessonViewSet(ModelViewSet):
     serializer_class = LessonSerializer
     queryset = LessonModel.objects.all()
+    permission_classes = (IsTrainerOrSectionOwner,)
 
     def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
         section_id = request.query_params.get('section_id')
