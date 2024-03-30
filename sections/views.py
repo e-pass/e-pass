@@ -11,7 +11,7 @@ from sections.models import GroupModel, LessonModel, SectionModel
 from sections.serializer import (GroupSerializer, LessonSerializer,
                                  SectionSerializer, ShortGroupSerializer,
                                  ShortSectionSerializer)
-from users.permissions import IsSectionOwner, IsTrainer
+from users.permissions import IsSectionOwner, IsTrainer, IsTrainerOrSectionOwner
 
 
 class SectionViewSet(ModelViewSet):
@@ -38,6 +38,7 @@ class GroupListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = GroupSerializer
     lookup_url_kwarg = 'section_id'
     search_fields = ('^name',)
+    permission_classes = (IsTrainerOrSectionOwner,)
 
     def get_queryset(self) -> QuerySet:
         section_id = self.kwargs.get(self.lookup_url_kwarg)
@@ -57,6 +58,7 @@ class GroupRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = GroupSerializer
     lookup_url_kwarg = 'group_id'
     section_lookup_url_kwarg = 'section_id'
+    permission_classes = (IsTrainerOrSectionOwner,)
 
     def get_object(self) -> Any:
         section_id = self.kwargs.get(self.section_lookup_url_kwarg)
