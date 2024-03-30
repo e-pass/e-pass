@@ -109,6 +109,7 @@ class LessonSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
     def update(self, instance: Any, validated_data: Any) -> Any:
-        group_id = validated_data.pop('group_id')
-        validated_data['group'] = group_id
+        if validated_data.get('group_id'):
+            group_id = validated_data.pop('group_id')
+            validated_data['group'] = group_id
         return super().update(instance, validated_data)
