@@ -1,5 +1,7 @@
 from typing import Any
 
+from drf_yasg.utils import swagger_auto_schema
+from django.utils.decorators import method_decorator
 from django.db.models import Count, F, Prefetch, QuerySet
 from django.http import JsonResponse
 from rest_framework import generics, status
@@ -8,6 +10,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 
+from resources.schemas.schema_data import API_METADATA
 from membership_passes.models import EntryModel, PassModel
 from membership_passes.serializer import (CreatePassSerializer,
                                           EntrySerializer, PassSerializer)
@@ -18,6 +21,7 @@ from users.permissions import (IsPassStudentOrTrainerOrSectionOwner, IsTrainer,
                                IsTrainerOrSectionOwner)
 
 
+@method_decorator(name="post", decorator=swagger_auto_schema(**API_METADATA["EntryCreateView_post"]))
 class EntryCreateView(generics.CreateAPIView):
     permission_classes = (IsAuthenticated, IsTrainer)
     queryset = EntryModel.objects.all()
