@@ -2,11 +2,12 @@ from typing import Any, Type
 
 from django.contrib.auth.base_user import BaseUserManager
 from django.db import models
+from django.db.models import QuerySet
 from phonenumber_field.modelfields import PhoneNumberField
 
 
 class UserQuerySet(models.query.QuerySet):
-    def search(self, query: str) -> Type['UserQuerySet']:
+    def search(self, query: str) -> QuerySet:
         lookups = (
             models.Q(phone_number__contains=query) |
             models.Q(first_name__icontains=query) |
@@ -47,6 +48,7 @@ class UserModelManager(BaseUserManager):
     def create_superuser(self, phone_number: str, password: Any, **extra_fields: Any) -> Type['UserModel']:
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_trainer', True)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')

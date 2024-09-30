@@ -83,22 +83,33 @@ class SectionSerializer(serializers.ModelSerializer):
 
 
 class LessonSerializer(serializers.ModelSerializer):
+    group = ShortGroupSerializer(read_only=True)
     group_id = serializers.PrimaryKeyRelatedField(
         queryset=GroupModel.objects.all(),
         write_only=True,
         required=True
     )
-    lesson_datetime = serializers.DateTimeField()
-    duration = serializers.FloatField(default=50)
-    is_canceled = serializers.BooleanField(default=False)
-    type = serializers.CharField(read_only=True)
-    group = ShortGroupSerializer(read_only=True)
 
     class Meta:
         model = LessonModel
         fields = '__all__'
+        read_only_fields = ['type']
+
+    @staticmethod
+    def validate_group_id(value: GroupModel):
+        try:
+            group = GroupModel.objects.get(id=value.id)
+            return group
+        except GroupModel.DoesNotExist:
+            raise serializers.ValidationError('Invalid group ID')
 
     def create(self, validated_data: Any) -> Any:
         group_id = validated_data.pop('group_id')
         validated_data['group'] = group_id
         return super().create(validated_data)
+
+    def update(self, instance: Any, validated_data: Any) -> Any:
+        if validated_data.get('group_id'):
+            group_id = validated_data.pop('group_id')
+            validated_data['group'] = group_id
+        return super().update(instance, validated_data)

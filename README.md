@@ -46,3 +46,9 @@ celery -A ePass.celery worker -l INFO
 docker-compose build
 docker-compose up
 ```
+
+### Pre-commit hook ###
+```commandline
+pre-commit install
+pre-commit run
+```
